@@ -1,4 +1,4 @@
--- 1.8.0
+-- 1.8.1
 local StrToNumber = tonumber;
 local Byte = string.byte;
 local Char = string.char;
