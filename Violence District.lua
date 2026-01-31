@@ -1,4 +1,4 @@
-local __VERSION__ = "1.8.1"
+local __VERSION__ = "2.0.0"
 local StrToNumber = tonumber;
 local Byte = string.byte;
 local Char = string.char;
