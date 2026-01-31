@@ -10,7 +10,7 @@ local InterfaceManager = {} do
     }
 
     function InterfaceManager:SetFolder(folder)
-		self.Folder = folder;
+		self.Folder = folder
 		self:BuildFolderTree()
 	end
 
@@ -55,6 +55,9 @@ local InterfaceManager = {} do
         end
     end
 
+	-- =====================================================================
+	-- AQUI ESTÁ A PARTE QUE VOCÊ PRECISA SUBSTITUIR / ATUALIZAR
+	-- =====================================================================
     function InterfaceManager:BuildInterfaceSection(tab)
         assert(self.Library, "Must set InterfaceManager.Library")
 		local Library = self.Library
@@ -62,11 +65,13 @@ local InterfaceManager = {} do
 
         InterfaceManager:LoadSettings()
 
-		local section = tab:AddSection("Interface")
+		local section = tab:AddSection("Interface")  -- ← título da seção (pode deixar fixo ou usar _ se preferir)
 
 		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
-			Title = "Theme",
-			Description = "Changes the interface theme.",
+			TitleEN = "Theme",
+			TitlePTBR = "Tema",
+			DescriptionEN = "Changes the interface theme.",
+			DescriptionPTBR = "Altera o tema da interface.",
 			Values = Library.Themes,
 			Default = Settings.Theme,
 			Callback = function(Value)
@@ -80,8 +85,10 @@ local InterfaceManager = {} do
 	
 		if Library.UseAcrylic then
 			section:AddToggle("AcrylicToggle", {
-				Title = "Acrylic",
-				Description = "The blurred background requires graphic quality 8+",
+				TitleEN = "Acrylic",
+				TitlePTBR = "Acrílico",
+				DescriptionEN = "The blurred background requires graphic quality 8+",
+				DescriptionPTBR = "O fundo borrado requer qualidade gráfica 8+",
 				Default = Settings.Acrylic,
 				Callback = function(Value)
 					Library:ToggleAcrylic(Value)
@@ -92,8 +99,10 @@ local InterfaceManager = {} do
 		end
 	
 		section:AddToggle("TransparentToggle", {
-			Title = "Transparency",
-			Description = "Makes the interface transparent.",
+			TitleEN = "Transparency",
+			TitlePTBR = "Transparência",
+			DescriptionEN = "Makes the interface transparent.",
+			DescriptionPTBR = "Torna a interface transparente.",
 			Default = Settings.Transparency,
 			Callback = function(Value)
 				Library:ToggleTransparency(Value)
@@ -102,11 +111,17 @@ local InterfaceManager = {} do
 			end
 		})
 	
-		local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Settings.MenuKeybind })
+		local MenuKeybind = section:AddKeybind("MenuKeybind", { 
+			TitleEN = "Minimize Bind",
+			TitlePTBR = "Tecla de minimizar",
+			Default = Settings.MenuKeybind 
+		})
+
 		MenuKeybind:OnChanged(function()
 			Settings.MenuKeybind = MenuKeybind.Value
             InterfaceManager:SaveSettings()
 		end)
+
 		Library.MinimizeKeybind = MenuKeybind
     end
 end
