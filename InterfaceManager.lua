@@ -80,21 +80,6 @@ local InterfaceManager = {} do
 
         InterfaceTheme:SetValue(Settings.Theme)
 	
-		if Library.UseAcrylic then
-			section:AddToggle("AcrylicToggle", {
-				TitleEN = "Acrylic",
-				TitlePTBR = "Acrílico",
-				DescriptionEN = "The blurred background requires graphic quality 8+",
-				DescriptionPTBR = "O fundo borrado requer qualidade gráfica 8+",
-				Default = Settings.Acrylic,
-				Callback = function(Value)
-					Library:ToggleAcrylic(Value)
-                    Settings.Acrylic = Value
-                    InterfaceManager:SaveSettings()
-				end
-			})
-		end
-	
 		section:AddToggle("TransparentToggle", {
 			TitleEN = "Transparency",
 			TitlePTBR = "Transparência",
