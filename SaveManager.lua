@@ -189,134 +189,168 @@ local SaveManager = {} do
 	end
 
 	function SaveManager:BuildConfigSection(tab)
-		assert(self.Library, "Must set SaveManager.Library")
+    assert(self.Library, "Must set SaveManager.Library")
 
-		local section = tab:AddSection("Configuration")
+    local section = tab:AddSection("Configuration")
 
-        section:AddInput("SaveManager_ConfigName", { 
-            Title = getgenv().ScriptLanguage == "PTBR" and "Nome da configuração" or "Config name",
-        })
+    section:AddInput("SaveManager_ConfigName", { 
+        Title = getgenv().ScriptLanguage == "PTBR" and "Nome da configuração" or "Config name",
+    })
 
-		section:AddDropdown("SaveManager_ConfigList", { 
-			TitleEN = "Config list",
-			TitlePTBR = "Lista de configurações",
-			Values = self:RefreshConfigList(), 
-			AllowNull = true 
-		})
+    section:AddDropdown("SaveManager_ConfigList", { 
+        Title = getgenv().ScriptLanguage == "PTBR" and "Lista de configurações" or "Config list",
+        Values = self:RefreshConfigList(), 
+        AllowNull = true 
+    })
 
-		section:AddButton({
-			TitleEN = "Create config",
-			TitlePTBR = "Criar configuração",
-			Callback = function()
-				local name = SaveManager.Options.SaveManager_ConfigName.Value
-				if name:gsub("%s+", "") == "" then 
-					return self.Library:Notify({
-						Title = "Interface",
-						Content = "Config loader",
-						SubContent = "Invalid config name (empty)",
-						Duration = 7
-					})
-				end
-				local success, err = self:Save(name)
-				if not success then
-					return self.Library:Notify({
-						Title = "Interface",
-						Content = "Config loader",
-						SubContent = "Failed to save config: " .. err,
-						Duration = 7
-					})
-				end
-				self.Library:Notify({
-					Title = "Interface",
-					Content = "Config loader",
-					SubContent = string.format("Created config %q", name),
-					Duration = 7
-				})
-				SaveManager.Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
-				SaveManager.Options.SaveManager_ConfigList:SetValue(nil)
-			end
-		})
+    section:AddButton({
+        Title = getgenv().ScriptLanguage == "PTBR" and "Criar configuração" or "Create config",
+        Callback = function()
+            local name = SaveManager.Options and SaveManager.Options.SaveManager_ConfigName and SaveManager.Options.SaveManager_ConfigName.Value or ""
+            if name:gsub("%s+", "") == "" then 
+                if self.Library and self.Library.Notify then
+                    self.Library:Notify({
+                        Title = "Interface",
+                        Content = "Config loader",
+                        SubContent = "Invalid config name (empty)",
+                        Duration = 7
+                    })
+                end
+                return
+            end
 
-		section:AddButton({
-			TitleEN = "Load config",
-			TitlePTBR = "Carregar configuração",
-			Callback = function()
-				local name = SaveManager.Options.SaveManager_ConfigList.Value
-				local success, err = self:Load(name)
-				if not success then
-					return self.Library:Notify({
-						Title = "Interface",
-						Content = "Config loader",
-						SubContent = "Failed to load config: " .. err,
-						Duration = 7
-					})
-				end
-				self.Library:Notify({
-					Title = "Interface",
-					Content = "Config loader",
-					SubContent = string.format("Loaded config %q", name),
-					Duration = 7
-				})
-			end
-		})
+            local success, err = self:Save(name)
+            if not success then
+                if self.Library and self.Library.Notify then
+                    self.Library:Notify({
+                        Title = "Interface",
+                        Content = "Config loader",
+                        SubContent = "Failed to save config: " .. err,
+                        Duration = 7
+                    })
+                end
+                return
+            end
 
-		section:AddButton({
-			TitleEN = "Overwrite config",
-			TitlePTBR = "Sobrescrever configuração",
-			Callback = function()
-				local name = SaveManager.Options.SaveManager_ConfigList.Value
-				local success, err = self:Save(name)
-				if not success then
-					return self.Library:Notify({
-						Title = "Interface",
-						Content = "Config loader",
-						SubContent = "Failed to overwrite config: " .. err,
-						Duration = 7
-					})
-				end
-				self.Library:Notify({
-					Title = "Interface",
-					Content = "Config loader",
-					SubContent = string.format("Overwrote config %q", name),
-					Duration = 7
-				})
-			end
-		})
+            if self.Library and self.Library.Notify then
+                self.Library:Notify({
+                    Title = "Interface",
+                    Content = "Config loader",
+                    SubContent = string.format("Created config %q", name),
+                    Duration = 7
+                })
+            end
 
-		section:AddButton({
-			TitleEN = "Refresh list",
-			TitlePTBR = "Atualizar lista",
-			Callback = function()
-				SaveManager.Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
-				SaveManager.Options.SaveManager_ConfigList:SetValue(nil)
-			end
-		})
+            if SaveManager.Options and SaveManager.Options.SaveManager_ConfigList then
+                SaveManager.Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
+                SaveManager.Options.SaveManager_ConfigList:SetValue(nil)
+            end
+        end
+    })
 
-		local AutoloadButton
-		AutoloadButton = section:AddButton({
-			TitleEN = "Set as autoload",
-			TitlePTBR = "Definir como autoload",
-			Description = "Current autoload config: none",
-			Callback = function()
-				local name = SaveManager.Options.SaveManager_ConfigList.Value
-				writefile(self.Folder .. "/settings/autoload.txt", name)
-				AutoloadButton:SetDesc("Current autoload config: " .. name)
-				self.Library:Notify({
-					Title = "Interface",
-					Content = "Config loader",
-					SubContent = string.format("Set %q to auto load", name),
-					Duration = 7
-				})
-			end
-		})
+    section:AddButton({
+        Title = getgenv().ScriptLanguage == "PTBR" and "Carregar configuração" or "Load config",
+        Callback = function()
+            local name = SaveManager.Options and SaveManager.Options.SaveManager_ConfigList and SaveManager.Options.SaveManager_ConfigList.Value or nil
+            if not name then return end
 
-		if isfile(self.Folder .. "/settings/autoload.txt") then
-			local name = readfile(self.Folder .. "/settings/autoload.txt")
-			AutoloadButton:SetDesc("Current autoload config: " .. name)
-		end
+            local success, err = self:Load(name)
+            if not success then
+                if self.Library and self.Library.Notify then
+                    self.Library:Notify({
+                        Title = "Interface",
+                        Content = "Config loader",
+                        SubContent = "Failed to load config: " .. err,
+                        Duration = 7
+                    })
+                end
+                return
+            end
 
-		SaveManager:SetIgnoreIndexes({ "SaveManager_ConfigList", "SaveManager_ConfigName" })
-	end
+            if self.Library and self.Library.Notify then
+                self.Library:Notify({
+                    Title = "Interface",
+                    Content = "Config loader",
+                    SubContent = string.format("Loaded config %q", name),
+                    Duration = 7
+                })
+            end
+        end
+    })
+
+    section:AddButton({
+        Title = getgenv().ScriptLanguage == "PTBR" and "Sobrescrever configuração" or "Overwrite config",
+        Callback = function()
+            local name = SaveManager.Options and SaveManager.Options.SaveManager_ConfigList and SaveManager.Options.SaveManager_ConfigList.Value or nil
+            if not name then return end
+
+            local success, err = self:Save(name)
+            if not success then
+                if self.Library and self.Library.Notify then
+                    self.Library:Notify({
+                        Title = "Interface",
+                        Content = "Config loader",
+                        SubContent = "Failed to overwrite config: " .. err,
+                        Duration = 7
+                    })
+                end
+                return
+            end
+
+            if self.Library and self.Library.Notify then
+                self.Library:Notify({
+                    Title = "Interface",
+                    Content = "Config loader",
+                    SubContent = string.format("Overwrote config %q", name),
+                    Duration = 7
+                })
+            end
+        end
+    })
+
+    section:AddButton({
+        Title = getgenv().ScriptLanguage == "PTBR" and "Atualizar lista" or "Refresh list",
+        Callback = function()
+            if SaveManager.Options and SaveManager.Options.SaveManager_ConfigList then
+                SaveManager.Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
+                SaveManager.Options.SaveManager_ConfigList:SetValue(nil)
+            end
+        end
+    })
+
+    local AutoloadButton
+    AutoloadButton = section:AddButton({
+        Title = getgenv().ScriptLanguage == "PTBR" and "Definir como autoload" or "Set as autoload",
+        Description = getgenv().ScriptLanguage == "PTBR" and "Configuração de autoload atual: nenhuma" or "Current autoload config: none",
+        Callback = function()
+            local name = SaveManager.Options and SaveManager.Options.SaveManager_ConfigList and SaveManager.Options.SaveManager_ConfigList.Value or nil
+            if not name then return end
+
+            writefile(self.Folder .. "/settings/autoload.txt", name)
+            if AutoloadButton then
+                AutoloadButton:SetDesc(getgenv().ScriptLanguage == "PTBR" and "Configuração de autoload atual: " .. name or "Current autoload config: " .. name)
+            end
+
+            if self.Library and self.Library.Notify then
+                self.Library:Notify({
+                    Title = "Interface",
+                    Content = "Config loader",
+                    SubContent = string.format("Set %q to auto load", name),
+                    Duration = 7
+                })
+            end
+        end
+    })
+
+    if isfile(self.Folder .. "/settings/autoload.txt") then
+        local name = readfile(self.Folder .. "/settings/autoload.txt")
+        if AutoloadButton then
+            AutoloadButton:SetDesc(getgenv().ScriptLanguage == "PTBR" and "Configuração de autoload atual: " .. name or "Current autoload config: " .. name)
+        end
+    end
+
+    SaveManager:SetIgnoreIndexes({ "SaveManager_ConfigList", "SaveManager_ConfigName" })
+end
 
 	SaveManager:BuildFolderTree()
 end
