@@ -56,56 +56,61 @@ local InterfaceManager = {} do
     end
 
     function InterfaceManager:BuildInterfaceSection(tab)
-        assert(self.Library, "Must set InterfaceManager.Library")
-		local Library = self.Library
-        local Settings = InterfaceManager.Settings
+    assert(self.Library, "Must set InterfaceManager.Library")
+    local Library = self.Library
+    local Settings = InterfaceManager.Settings
 
-        InterfaceManager:LoadSettings()
+    InterfaceManager:LoadSettings()
 
-		local section = tab:AddSection("Interface")
+    local section = tab:AddSection("Interface")
 
-		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
-			TitleEN = "Theme",
-			TitlePTBR = "Tema",
-			DescriptionEN = "Changes the interface theme.",
-			DescriptionPTBR = "Altera o tema da interface.",
-			Values = Library.Themes,
-			Default = Settings.Theme,
-			Callback = function(Value)
-				Library:SetTheme(Value)
-                Settings.Theme = Value
-                InterfaceManager:SaveSettings()
-			end
-		})
-
-        InterfaceTheme:SetValue(Settings.Theme)
-	
-		section:AddToggle("TransparentToggle", {
-			TitleEN = "Transparency",
-			TitlePTBR = "Transparência",
-			DescriptionEN = "Makes the interface transparent.",
-			DescriptionPTBR = "Torna a interface transparente.",
-			Default = Settings.Transparency,
-			Callback = function(Value)
-				Library:ToggleTransparency(Value)
-				Settings.Transparency = Value
-                InterfaceManager:SaveSettings()
-			end
-		})
-	
-		local MenuKeybind = section:AddKeybind("MenuKeybind", { 
-			TitleEN = "Minimize Bind",
-			TitlePTBR = "Tecla de minimizar",
-			Default = Settings.MenuKeybind 
-		})
-
-		MenuKeybind:OnChanged(function()
-			Settings.MenuKeybind = MenuKeybind.Value
+    local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
+        Title = _("Theme", "Tema"),
+        Description = _("Changes the interface theme.", "Altera o tema da interface."),
+        Values = Library.Themes,
+        Default = Settings.Theme,
+        Callback = function(Value)
+            Library:SetTheme(Value)
+            Settings.Theme = Value
             InterfaceManager:SaveSettings()
-		end)
+        end
+    })
 
-		Library.MinimizeKeybind = MenuKeybind
-    end
+    InterfaceTheme:SetValue(Settings.Theme)
+
+    section:AddToggle("AcrylicToggle", {
+        Title = _("Acrylic Blur", "Desfoque Acrílico"),
+        Description = _("Enable/disable acrylic blur effect.", "Ativa/desativa o efeito de desfoque acrílico."),
+        Default = Settings.Acrylic,
+        Callback = function(Value)
+            Library:ToggleAcrylic(Value)
+            Settings.Acrylic = Value
+            InterfaceManager:SaveSettings()
+        end
+    })
+
+    section:AddToggle("TransparentToggle", {
+        Title = _("Transparency", "Transparência"),
+        Description = _("Makes the interface transparent.", "Torna a interface transparente."),
+        Default = Settings.Transparency,
+        Callback = function(Value)
+            Library:ToggleTransparency(Value)
+            Settings.Transparency = Value
+            InterfaceManager:SaveSettings()
+        end
+    })
+
+    local MenuKeybind = section:AddKeybind("MenuKeybind", { 
+        Title = _("Minimize Bind", "Tecla de Minimizar"),
+        Default = Settings.MenuKeybind 
+    })
+
+    MenuKeybind:OnChanged(function()
+        Settings.MenuKeybind = MenuKeybind.Value
+        InterfaceManager:SaveSettings()
+    end)
+
+    Library.MinimizeKeybind = MenuKeybind
 end
 
 return InterfaceManager
