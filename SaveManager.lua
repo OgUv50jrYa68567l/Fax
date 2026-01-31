@@ -193,10 +193,9 @@ local SaveManager = {} do
 
 		local section = tab:AddSection("Configuration")
 
-		section:AddInput("SaveManager_ConfigName", { 
-			TitleEN = "Config name",
-			TitlePTBR = "Nome da configuração",
-		})
+        section:AddInput("SaveManager_ConfigName", { 
+            Title = _("Config name", "Nome da configuração"),
+        })
 
 		section:AddDropdown("SaveManager_ConfigList", { 
 			TitleEN = "Config list",
