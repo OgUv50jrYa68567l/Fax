@@ -194,7 +194,7 @@ local SaveManager = {} do
 		local section = tab:AddSection("Configuration")
 
         section:AddInput("SaveManager_ConfigName", { 
-            Title = _("Config name", "Nome da configuração"),
+            Title = getgenv().ScriptLanguage == "PTBR" and "Nome da configuração" or "Config name",
         })
 
 		section:AddDropdown("SaveManager_ConfigList", { 
