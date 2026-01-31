@@ -55,9 +55,6 @@ local InterfaceManager = {} do
         end
     end
 
-	-- =====================================================================
-	-- AQUI ESTÁ A PARTE QUE VOCÊ PRECISA SUBSTITUIR / ATUALIZAR
-	-- =====================================================================
     function InterfaceManager:BuildInterfaceSection(tab)
         assert(self.Library, "Must set InterfaceManager.Library")
 		local Library = self.Library
@@ -65,7 +62,7 @@ local InterfaceManager = {} do
 
         InterfaceManager:LoadSettings()
 
-		local section = tab:AddSection("Interface")  -- ← título da seção (pode deixar fixo ou usar _ se preferir)
+		local section = tab:AddSection("Interface")
 
 		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
 			TitleEN = "Theme",

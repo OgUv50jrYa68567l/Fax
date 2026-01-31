@@ -84,14 +84,11 @@ local SaveManager = {} do
 
 		local fullPath = self.Folder .. "/settings/" .. name .. ".json"
 
-		local data = {
-			objects = {}
-		}
+		local data = { objects = {} }
 
 		for idx, option in next, SaveManager.Options do
 			if not self.Parser[option.Type] then continue end
 			if self.Ignore[idx] then continue end
-
 			table.insert(data.objects, self.Parser[option.Type].Save(idx, option))
 		end	
 
@@ -131,10 +128,7 @@ local SaveManager = {} do
 	end
 
 	function SaveManager:BuildFolderTree()
-		local paths = {
-			self.Folder,
-			self.Folder .. "/settings"
-		}
+		local paths = { self.Folder, self.Folder .. "/settings" }
 
 		for i = 1, #paths do
 			local str = paths[i]
@@ -146,20 +140,17 @@ local SaveManager = {} do
 
 	function SaveManager:RefreshConfigList()
 		local list = listfiles(self.Folder .. "/settings")
-
 		local out = {}
 		for i = 1, #list do
 			local file = list[i]
 			if file:sub(-5) == ".json" then
 				local pos = file:find(".json", 1, true)
 				local start = pos
-
 				local char = file:sub(pos, pos)
 				while char ~= "/" and char ~= "\\" and char ~= "" do
 					pos = pos - 1
 					char = file:sub(pos, pos)
 				end
-
 				if char == "/" or char == "\\" then
 					local name = file:sub(pos + 1, start - 1)
 					if name ~= "options" then
@@ -168,7 +159,6 @@ local SaveManager = {} do
 				end
 			end
 		end
-		
 		return out
 	end
 
@@ -180,7 +170,6 @@ local SaveManager = {} do
 	function SaveManager:LoadAutoloadConfig()
 		if isfile(self.Folder .. "/settings/autoload.txt") then
 			local name = readfile(self.Folder .. "/settings/autoload.txt")
-
 			local success, err = self:Load(name)
 			if not success then
 				return self.Library:Notify({
@@ -190,7 +179,6 @@ local SaveManager = {} do
 					Duration = 7
 				})
 			end
-
 			self.Library:Notify({
 				Title = "Interface",
 				Content = "Config loader",
@@ -200,13 +188,10 @@ local SaveManager = {} do
 		end
 	end
 
-	-- =====================================================================
-	-- AQUI ESTÁ A PARTE QUE VOCÊ PRECISA SUBSTITUIR / ATUALIZAR
-	-- =====================================================================
 	function SaveManager:BuildConfigSection(tab)
 		assert(self.Library, "Must set SaveManager.Library")
 
-		local section = tab:AddSection("Configuration")  -- ← título da seção (pode deixar fixo ou usar _ se preferir)
+		local section = tab:AddSection("Configuration")
 
 		section:AddInput("SaveManager_ConfigName", { 
 			TitleEN = "Config name",
@@ -225,7 +210,6 @@ local SaveManager = {} do
 			TitlePTBR = "Criar configuração",
 			Callback = function()
 				local name = SaveManager.Options.SaveManager_ConfigName.Value
-
 				if name:gsub("%s+", "") == "" then 
 					return self.Library:Notify({
 						Title = "Interface",
@@ -234,7 +218,6 @@ local SaveManager = {} do
 						Duration = 7
 					})
 				end
-
 				local success, err = self:Save(name)
 				if not success then
 					return self.Library:Notify({
@@ -244,14 +227,12 @@ local SaveManager = {} do
 						Duration = 7
 					})
 				end
-
 				self.Library:Notify({
 					Title = "Interface",
 					Content = "Config loader",
 					SubContent = string.format("Created config %q", name),
 					Duration = 7
 				})
-
 				SaveManager.Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
 				SaveManager.Options.SaveManager_ConfigList:SetValue(nil)
 			end
@@ -262,7 +243,6 @@ local SaveManager = {} do
 			TitlePTBR = "Carregar configuração",
 			Callback = function()
 				local name = SaveManager.Options.SaveManager_ConfigList.Value
-
 				local success, err = self:Load(name)
 				if not success then
 					return self.Library:Notify({
@@ -272,7 +252,6 @@ local SaveManager = {} do
 						Duration = 7
 					})
 				end
-
 				self.Library:Notify({
 					Title = "Interface",
 					Content = "Config loader",
@@ -287,7 +266,6 @@ local SaveManager = {} do
 			TitlePTBR = "Sobrescrever configuração",
 			Callback = function()
 				local name = SaveManager.Options.SaveManager_ConfigList.Value
-
 				local success, err = self:Save(name)
 				if not success then
 					return self.Library:Notify({
@@ -297,7 +275,6 @@ local SaveManager = {} do
 						Duration = 7
 					})
 				end
-
 				self.Library:Notify({
 					Title = "Interface",
 					Content = "Config loader",
@@ -319,9 +296,8 @@ local SaveManager = {} do
 		local AutoloadButton
 		AutoloadButton = section:AddButton({
 			TitleEN = "Set as autoload",
-			TitlePTBR = "Definir como carregamento automático",
-			DescriptionEN = "Current autoload config: none",
-			DescriptionPTBR = "Configuração de carregamento automático atual: nenhuma",
+			TitlePTBR = "Definir como autoload",
+			Description = "Current autoload config: none",
 			Callback = function()
 				local name = SaveManager.Options.SaveManager_ConfigList.Value
 				writefile(self.Folder .. "/settings/autoload.txt", name)
