@@ -3653,6 +3653,14 @@ function Element:New(Idx, Config)
     local function DisplayKey(Key)
         return (Key == nil or Key == "" or Key == "None") and "Set Keybind" or Key
     end
+    local function ShortKey(Key)
+        local Names = {
+            LeftControl = "LCtrl", RightControl = "RCtrl", LeftShift = "LSh", RightShift = "RSh",
+            LeftAlt = "LAlt", RightAlt = "RAlt", MouseLeft = "M1", MouseRight = "M2",
+            Space = "Spc", Return = "Enter", CapsLock = "Caps", Backspace = "Bksp",
+        }
+        return Names[Key] or Key
+    end
 
 	local KeybindFrame = Config.InlineFrame or require(Components.Element)(Config.Title, Config.Description, self.Container, true)
 
@@ -3668,9 +3676,12 @@ function Element:New(Idx, Config)
 		TextColor3 = Color3.fromRGB(240, 240, 240),
 		TextSize = Inline and 12 or 16,
 		TextXAlignment = Enum.TextXAlignment.Center,
-		Size = Inline and UDim2.new(1, -24, 0, 16) or UDim2.new(0, 0, 0, 14),
-		Position = UDim2.new(0, Inline and 24 or 0, 0.5, 0),
-		AnchorPoint = Vector2.new(0, 0.5),
+		Size = Inline and UDim2.new(1, 0, 0, 18) or UDim2.new(0, 0, 0, 14),
+		Position = UDim2.new(Inline and 0.5 or 0, 0, 0.5, 0),
+		AnchorPoint = Vector2.new(Inline and 0.5 or 0, 0.5),
+        TextScaled = Inline,
+        ZIndex = 4,
+        Active = false,
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		AutomaticSize = Inline and Enum.AutomaticSize.None or Enum.AutomaticSize.X,
 		TextTruncate = Enum.TextTruncate.AtEnd,
@@ -3685,8 +3696,8 @@ function Element:New(Idx, Config)
         Active = true,
         Selectable = true,
         ZIndex = 3,
-		Size = UDim2.fromOffset(Inline and 32 or 0, 32),
-		Position = UDim2.new(1, Inline and -52 or -10, 0.5, 0),
+		Size = UDim2.fromOffset(Inline and 26 or 0, Inline and 26 or 32),
+		Position = UDim2.new(1, Inline and -62 or -10, 0.5, 0),
 		AnchorPoint = Vector2.new(1, 0.5),
 		Text = "",
 		BackgroundTransparency = Inline and 0 or 0.9,
@@ -3701,8 +3712,8 @@ function Element:New(Idx, Config)
 			CornerRadius = UDim.new(0, 5),
 		}),
 		New("UIPadding", {
-			PaddingLeft = UDim.new(0, 8),
-			PaddingRight = UDim.new(0, 8),
+			PaddingLeft = UDim.new(0, Inline and 3 or 8),
+			PaddingRight = UDim.new(0, Inline and 3 or 8),
 		}),
 		New("UIStroke", {
 			Transparency = Inline and 0 or 0.5,
@@ -3714,12 +3725,13 @@ function Element:New(Idx, Config)
 		KeybindDisplayLabel,
 	})
 
-    local NotificationButton, NotificationIcon, CaptureHint
+    local NotificationButton, NotificationIcon, CaptureHint, KeyboardIcon
     if Inline then
-        New("ImageLabel", {
+        New("UITextSizeConstraint", { Parent = KeybindDisplayLabel, MinTextSize = 8, MaxTextSize = 12 })
+        KeyboardIcon = New("ImageLabel", {
             Parent = KeybindDisplayFrame,
             BackgroundTransparency = 1,
-            Size = UDim2.fromOffset(16, 16),
+            Size = UDim2.fromOffset(13, 13),
             Position = UDim2.new(0.5, 0, 0.5, 0),
             AnchorPoint = Vector2.new(0.5, 0.5),
             Image = Library:GetIcon("keyboard"),
@@ -3731,8 +3743,8 @@ function Element:New(Idx, Config)
         NotificationButton = New("TextButton", {
             Name = "NotificationButton",
             Parent = KeybindFrame.Frame,
-            Size = UDim2.fromOffset(32, 32),
-            Position = UDim2.new(1, -90, 0.5, 0),
+            Size = UDim2.fromOffset(26, 26),
+            Position = UDim2.new(1, -96, 0.5, 0),
             AnchorPoint = Vector2.new(1, 0.5),
             Text = "",
             Active = true,
@@ -3747,7 +3759,7 @@ function Element:New(Idx, Config)
         })
         NotificationIcon = New("ImageLabel", {
             Parent = NotificationButton,
-            Size = UDim2.fromOffset(16, 16),
+            Size = UDim2.fromOffset(13, 13),
             Position = UDim2.new(0.5, 0, 0.5, 0),
             AnchorPoint = Vector2.new(0.5, 0.5),
             BackgroundTransparency = 1,
@@ -3761,9 +3773,10 @@ function Element:New(Idx, Config)
             Parent = KeybindFrame.Frame,
             Text = "Set Keybind",
             Visible = false,
-            Size = UDim2.fromOffset(280, 22),
-            Position = UDim2.new(1, -52, 1, -1),
-            AnchorPoint = Vector2.new(1, 0),
+            Size = UDim2.new(1, -142, 0, 32),
+            Position = UDim2.new(1, -130, 0.5, 0),
+            AnchorPoint = Vector2.new(1, 0.5),
+            TextWrapped = true,
             TextSize = 12,
             Font = Enum.Font.Gotham,
             ZIndex = 5,
@@ -3777,10 +3790,36 @@ function Element:New(Idx, Config)
     else
         KeybindFrame:StackControl(KeybindDisplayFrame)
     end
+    local function StyleButton(Button, Icon, Label, Enabled)
+        Button.BackgroundTransparency = Enabled and 0.15 or 0.88
+        Creator.OverrideTag(Button, { BackgroundColor3 = Enabled and "Accent" or "Keybind" })
+        local Border = Button:FindFirstChildOfClass("UIStroke")
+        if Border then
+            Border.Transparency = Enabled and 0.2 or 0.65
+            Creator.OverrideTag(Border, { Color = Enabled and "Accent" or "ToggleSlider" })
+        end
+        Icon.ImageTransparency = Enabled and 0 or 0.4
+        Creator.OverrideTag(Icon, { ImageColor3 = Enabled and "ToggleToggled" or "SubText" })
+        if Label then
+            Creator.OverrideTag(Label, { TextColor3 = Enabled and "ToggleToggled" or "SubText" })
+        end
+    end
+    local function RefreshBinding()
+        if not Inline then
+            KeybindDisplayLabel.Text = Picking and "Press a key" or DisplayKey(Keybind.Value)
+            return
+        end
+        local Assigned = Keybind.Value ~= "" and Keybind.Value ~= "None"
+        KeyboardIcon.Visible = not Assigned and not Picking
+        KeybindDisplayLabel.Visible = Assigned or Picking
+        KeybindDisplayLabel.Text = Picking and "..." or (Assigned and ShortKey(Keybind.Value) or "")
+        StyleButton(KeybindDisplayFrame, KeyboardIcon, KeybindDisplayLabel, Assigned or Picking)
+    end
     function Keybind:SetNotificationsEnabled(Value)
         self.NotificationsEnabled = Value == true
         if NotificationIcon then
             NotificationIcon.Image = Library:GetIcon(self.NotificationsEnabled and "bell-ring" or "bell-off")
+            StyleButton(NotificationButton, NotificationIcon, nil, self.NotificationsEnabled)
         end
     end
 	function Keybind:GetState()
@@ -3816,6 +3855,7 @@ function Element:New(Idx, Config)
 		KeybindDisplayLabel.Text = DisplayKey(Key)
 		Keybind.Value = Key
 		Keybind.Mode = Mode
+        RefreshBinding()
 	end
 
 	function Keybind:OnClick(Callback)
@@ -3870,7 +3910,7 @@ function Element:New(Idx, Config)
         Picking = false
         ReleaseInput = nil
         if Library.PickingKeybind == self then Library.PickingKeybind = nil end
-        if not Destroyed then KeybindDisplayLabel.Text = DisplayKey(self.Value) end
+        if not Destroyed then RefreshBinding() end
         if CaptureHint and not Destroyed then CaptureHint.Visible = false end
     end
 
@@ -3879,7 +3919,7 @@ function Element:New(Idx, Config)
         if Library.PickingKeybind then Library.PickingKeybind:CancelCapture() end
         Picking = true
         Library.PickingKeybind = Keybind
-        KeybindDisplayLabel.Text = "Press a key"
+        RefreshBinding()
         if CaptureHint then
             CaptureHint.Text = "Press a key | Esc: cancel | Backspace: clear"
             CaptureHint.Visible = true
@@ -3951,6 +3991,8 @@ function Element:New(Idx, Config)
 		end
 	end)
 
+    RefreshBinding()
+    Keybind:SetNotificationsEnabled(false)
 	Library.Options[Idx] = Keybind
 	return Keybind
 end
