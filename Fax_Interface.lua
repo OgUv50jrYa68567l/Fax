@@ -3680,7 +3680,7 @@ function Element:New(Idx, Config)
 	})
 
 	local KeybindDisplayFrame = New("TextButton", {
-		Size = UDim2.fromOffset(Inline and 32 or 0, 32),
+		Size = UDim2.fromOffset(Inline and 16 or 0, Inline and 16 or 32),
 		Position = Inline and UDim2.new(0, 10, 0.5, 0) or UDim2.new(1, -10, 0.5, 0),
 		AnchorPoint = Vector2.new(Inline and 0 or 1, 0.5),
 		Text = "",
@@ -3693,11 +3693,11 @@ function Element:New(Idx, Config)
 		},
 	}, {
 		New("UICorner", {
-			CornerRadius = UDim.new(0, 5),
+			CornerRadius = UDim.new(0, Inline and 3 or 5),
 		}),
 		New("UIPadding", {
-			PaddingLeft = UDim.new(0, 8),
-			PaddingRight = UDim.new(0, 8),
+			PaddingLeft = UDim.new(0, Inline and 4 or 8),
+			PaddingRight = UDim.new(0, Inline and 4 or 8),
 		}),
 		New("UIStroke", {
 			Transparency = 0.5,
@@ -3713,15 +3713,15 @@ function Element:New(Idx, Config)
         New("ImageLabel", {
             Parent = KeybindDisplayFrame,
             BackgroundTransparency = 1,
-            Size = UDim2.fromOffset(16, 16),
+            Size = UDim2.fromOffset(8, 8),
             Position = UDim2.new(0.5, 0, 0.5, 0),
             AnchorPoint = Vector2.new(0.5, 0.5),
             Image = Library:GetIcon("keyboard"),
             ImageTransparency = 0.5,
             ThemeTag = { ImageColor3 = "SubText" },
         })
-        KeybindFrame.LabelHolder.Position = UDim2.fromOffset(52, 0)
-        KeybindFrame.LabelHolder.Size = UDim2.new(1, -110, 0, 0)
+        KeybindFrame.LabelHolder.Position = UDim2.fromOffset(36, 0)
+        KeybindFrame.LabelHolder.Size = UDim2.new(1, -94, 0, 0)
         KeybindFrame.TitleLabel.Size = UDim2.new(1, 0, 0, 24)
         KeybindFrame.DescLabel.Size = UDim2.new(1, 0, 0, 14)
     else
