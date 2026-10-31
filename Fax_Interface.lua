@@ -3663,6 +3663,7 @@ function Element:New(Idx, Config)
 	local KeybindDisplayLabel = New("TextLabel", {
 		FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal),
 		Text = DisplayKey(Config.Default),
+		Visible = not Inline,
 		TextColor3 = Color3.fromRGB(240, 240, 240),
 		TextSize = Inline and 12 or 16,
 		TextXAlignment = Enum.TextXAlignment.Center,
@@ -3679,11 +3680,12 @@ function Element:New(Idx, Config)
 	})
 
 	local KeybindDisplayFrame = New("TextButton", {
-		Size = UDim2.fromOffset(Inline and 118 or 0, 32),
+		Size = UDim2.fromOffset(Inline and 32 or 0, 32),
 		Position = Inline and UDim2.new(0, 10, 0.5, 0) or UDim2.new(1, -10, 0.5, 0),
 		AnchorPoint = Vector2.new(Inline and 0 or 1, 0.5),
 		Text = "",
-		BackgroundTransparency = 0.9,
+		BackgroundTransparency = Inline and 0.5 or 0.9,
+		AutoButtonColor = not Inline,
 		Parent = KeybindFrame.Frame,
 		AutomaticSize = Inline and Enum.AutomaticSize.None or Enum.AutomaticSize.X,
 		ThemeTag = {
@@ -3712,13 +3714,14 @@ function Element:New(Idx, Config)
             Parent = KeybindDisplayFrame,
             BackgroundTransparency = 1,
             Size = UDim2.fromOffset(16, 16),
-            Position = UDim2.new(0, 0, 0.5, 0),
-            AnchorPoint = Vector2.new(0, 0.5),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            AnchorPoint = Vector2.new(0.5, 0.5),
             Image = Library:GetIcon("keyboard"),
+            ImageTransparency = 0.5,
             ThemeTag = { ImageColor3 = "SubText" },
         })
-        KeybindFrame.LabelHolder.Position = UDim2.fromOffset(138, 0)
-        KeybindFrame.LabelHolder.Size = UDim2.new(1, -196, 0, 0)
+        KeybindFrame.LabelHolder.Position = UDim2.fromOffset(52, 0)
+        KeybindFrame.LabelHolder.Size = UDim2.new(1, -110, 0, 0)
         KeybindFrame.TitleLabel.Size = UDim2.new(1, 0, 0, 24)
         KeybindFrame.DescLabel.Size = UDim2.new(1, 0, 0, 14)
     else
