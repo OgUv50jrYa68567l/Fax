@@ -3641,6 +3641,7 @@ function Element:New(Idx, Config)
 		Toggled = false,
 		Mode = Config.Mode or "Toggle",
 		Type = "Keybind",
+        NotificationsEnabled = false,
 		Callback = Config.Callback or function(Value) end,
 		ChangedCallback = Config.ChangedCallback or function(New) end,
 	}
@@ -3680,11 +3681,15 @@ function Element:New(Idx, Config)
 	})
 
 	local KeybindDisplayFrame = New("TextButton", {
-		Size = UDim2.fromOffset(Inline and 16 or 0, Inline and 16 or 32),
-		Position = Inline and UDim2.new(0, 10, 0.5, 0) or UDim2.new(1, -10, 0.5, 0),
-		AnchorPoint = Vector2.new(Inline and 0 or 1, 0.5),
+        Name = "KeybindButton",
+        Active = true,
+        Selectable = true,
+        ZIndex = 3,
+		Size = UDim2.fromOffset(Inline and 32 or 0, 32),
+		Position = UDim2.new(1, Inline and -52 or -10, 0.5, 0),
+		AnchorPoint = Vector2.new(1, 0.5),
 		Text = "",
-		BackgroundTransparency = Inline and 0.5 or 0.9,
+		BackgroundTransparency = Inline and 0 or 0.9,
 		AutoButtonColor = not Inline,
 		Parent = KeybindFrame.Frame,
 		AutomaticSize = Inline and Enum.AutomaticSize.None or Enum.AutomaticSize.X,
@@ -3693,14 +3698,14 @@ function Element:New(Idx, Config)
 		},
 	}, {
 		New("UICorner", {
-			CornerRadius = UDim.new(0, Inline and 3 or 5),
+			CornerRadius = UDim.new(0, 5),
 		}),
 		New("UIPadding", {
-			PaddingLeft = UDim.new(0, Inline and 4 or 8),
-			PaddingRight = UDim.new(0, Inline and 4 or 8),
+			PaddingLeft = UDim.new(0, 8),
+			PaddingRight = UDim.new(0, 8),
 		}),
 		New("UIStroke", {
-			Transparency = 0.5,
+			Transparency = Inline and 0 or 0.5,
 			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 			ThemeTag = {
 				Color = "InElementBorder",
@@ -3709,23 +3714,74 @@ function Element:New(Idx, Config)
 		KeybindDisplayLabel,
 	})
 
+    local NotificationButton, NotificationIcon, CaptureHint
     if Inline then
         New("ImageLabel", {
             Parent = KeybindDisplayFrame,
             BackgroundTransparency = 1,
-            Size = UDim2.fromOffset(8, 8),
+            Size = UDim2.fromOffset(16, 16),
             Position = UDim2.new(0.5, 0, 0.5, 0),
             AnchorPoint = Vector2.new(0.5, 0.5),
             Image = Library:GetIcon("keyboard"),
-            ImageTransparency = 0.5,
-            ThemeTag = { ImageColor3 = "SubText" },
+            ImageTransparency = 0,
+            ZIndex = 4,
+            Active = false,
+            ThemeTag = { ImageColor3 = "Text" },
         })
-        KeybindFrame.LabelHolder.Position = UDim2.fromOffset(36, 0)
-        KeybindFrame.LabelHolder.Size = UDim2.new(1, -94, 0, 0)
+        NotificationButton = New("TextButton", {
+            Name = "NotificationButton",
+            Parent = KeybindFrame.Frame,
+            Size = UDim2.fromOffset(32, 32),
+            Position = UDim2.new(1, -90, 0.5, 0),
+            AnchorPoint = Vector2.new(1, 0.5),
+            Text = "",
+            Active = true,
+            Selectable = true,
+            AutoButtonColor = false,
+            BackgroundTransparency = 0,
+            ZIndex = 3,
+            ThemeTag = { BackgroundColor3 = "Keybind" },
+        }, {
+            New("UICorner", { CornerRadius = UDim.new(0, 5) }),
+            New("UIStroke", { Transparency = 0, ThemeTag = { Color = "InElementBorder" } }),
+        })
+        NotificationIcon = New("ImageLabel", {
+            Parent = NotificationButton,
+            Size = UDim2.fromOffset(16, 16),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            BackgroundTransparency = 1,
+            ImageTransparency = 0,
+            Image = Library:GetIcon("bell-off"),
+            Active = false,
+            ZIndex = 4,
+            ThemeTag = { ImageColor3 = "Text" },
+        })
+        CaptureHint = New("TextLabel", {
+            Parent = KeybindFrame.Frame,
+            Text = "Set Keybind",
+            Visible = false,
+            Size = UDim2.fromOffset(280, 22),
+            Position = UDim2.new(1, -52, 1, -1),
+            AnchorPoint = Vector2.new(1, 0),
+            TextSize = 12,
+            Font = Enum.Font.Gotham,
+            ZIndex = 5,
+            Active = false,
+            ThemeTag = { BackgroundColor3 = "Keybind", TextColor3 = "Text" },
+        })
+        KeybindFrame.LabelHolder.Position = UDim2.fromOffset(10, 0)
+        KeybindFrame.LabelHolder.Size = UDim2.new(1, -142, 0, 0)
         KeybindFrame.TitleLabel.Size = UDim2.new(1, 0, 0, 24)
         KeybindFrame.DescLabel.Size = UDim2.new(1, 0, 0, 14)
     else
         KeybindFrame:StackControl(KeybindDisplayFrame)
+    end
+    function Keybind:SetNotificationsEnabled(Value)
+        self.NotificationsEnabled = Value == true
+        if NotificationIcon then
+            NotificationIcon.Image = Library:GetIcon(self.NotificationsEnabled and "bell-ring" or "bell-off")
+        end
     end
 	function Keybind:GetState()
 		if UserInputService:GetFocusedTextBox() and Keybind.Mode ~= "Always" then
@@ -3781,6 +3837,8 @@ function Element:New(Idx, Config)
         if Library.PickingKeybind == Keybind then Library.PickingKeybind = nil end
         if Inline then
             KeybindDisplayFrame:Destroy()
+            NotificationButton:Destroy()
+            CaptureHint:Destroy()
             KeybindFrame.LabelHolder.Position = UDim2.fromOffset(10, 0)
             KeybindFrame.LabelHolder.Size = UDim2.new(1, -28, 0, 0)
             KeybindFrame.TitleLabel.Size = UDim2.new(1, -58, 0, 24)
@@ -3791,26 +3849,55 @@ function Element:New(Idx, Config)
 		Library.Options[Idx] = nil
 	end
 
-    Creator.AddSignal(KeybindDisplayFrame.InputBegan, function(Input)
+    local function MarkControlInput(Input)
         if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
             KeybindFrame.KeybindInputAt = os.clock()
         end
-    end)
+    end
+    Creator.AddSignal(KeybindDisplayFrame.InputBegan, MarkControlInput)
+    Creator.AddSignal(KeybindDisplayFrame.InputEnded, MarkControlInput)
+    if NotificationButton then
+        Creator.AddSignal(NotificationButton.InputBegan, MarkControlInput)
+        Creator.AddSignal(NotificationButton.InputEnded, MarkControlInput)
+        Creator.AddSignal(NotificationButton.MouseButton1Click, function()
+            if Destroyed then return end
+            if Library.PickingKeybind then Library.PickingKeybind:CancelCapture() end
+            Keybind:SetNotificationsEnabled(not Keybind.NotificationsEnabled)
+        end)
+    end
 
     function Keybind:CancelCapture()
         Picking = false
         ReleaseInput = nil
         if Library.PickingKeybind == self then Library.PickingKeybind = nil end
         if not Destroyed then KeybindDisplayLabel.Text = DisplayKey(self.Value) end
+        if CaptureHint and not Destroyed then CaptureHint.Visible = false end
     end
 
-    Creator.AddSignal(KeybindDisplayFrame.Activated, function()
-        if Destroyed then return end
+    local function BeginCapture()
+        if Destroyed or Picking then return end
         if Library.PickingKeybind then Library.PickingKeybind:CancelCapture() end
         Picking = true
         Library.PickingKeybind = Keybind
         KeybindDisplayLabel.Text = "Press a key"
-    end)
+        if CaptureHint then
+            CaptureHint.Text = "Press a key | Esc: cancel | Backspace: clear"
+            CaptureHint.Visible = true
+        end
+    end
+    Creator.AddSignal(KeybindDisplayFrame.MouseButton1Click, BeginCapture)
+    Creator.AddSignal(KeybindDisplayFrame.Activated, BeginCapture)
+    if CaptureHint then
+        Creator.AddSignal(KeybindDisplayFrame.MouseEnter, function()
+            if not Picking then
+                CaptureHint.Text = DisplayKey(Keybind.Value) .. " | Click to change"
+                CaptureHint.Visible = true
+            end
+        end)
+        Creator.AddSignal(KeybindDisplayFrame.MouseLeave, function()
+            if not Picking then CaptureHint.Visible = false end
+        end)
+    end
 
     Creator.AddSignal(UserInputService.InputBegan, function(Input)
         if Destroyed or not Picking or ReleaseInput then return end
@@ -4094,7 +4181,7 @@ function Element:New(Idx, Config)
 	Toggle.SetTitle = ToggleFrame.SetTitle
 	Toggle.SetDesc = ToggleFrame.SetDesc
 
-    -- Reuse the keybind element on the left of this toggle, with no extra row.
+    -- Place keybind and notification controls beside the toggle switch.
     function Toggle:AddKeybind(KeybindIdx, KeybindConfig)
         if self.Keybind then self.Keybind:Destroy() end
         local ConfigCopy = table.clone(KeybindConfig)
@@ -4145,6 +4232,7 @@ function Element:New(Idx, Config)
 
 	function Toggle:SetValue(Value)
 		Value = not not Value
+        local PreviousValue = Toggle.Value
 		Toggle.Value = Value
 
 		Creator.OverrideTag(ToggleBorder, { Color = Toggle.Value and "Accent" or "ToggleSlider" })
@@ -4163,6 +4251,13 @@ function Element:New(Idx, Config)
 
 		Library:SafeCallback(Toggle.Callback, Toggle.Value)
 		Library:SafeCallback(Toggle.Changed, Toggle.Value)
+        if PreviousValue ~= Toggle.Value and Toggle.Keybind and Toggle.Keybind.NotificationsEnabled then
+            Library:Notify({
+                Title = ToggleFrame.TitleLabel.Text,
+                Content = Toggle.Value and "Enabled" or "Disabled",
+                Duration = 3,
+            })
+        end
 	end
 
 	function Toggle:Destroy()
