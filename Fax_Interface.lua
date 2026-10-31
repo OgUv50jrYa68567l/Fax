@@ -1,4 +1,3 @@
-local Fax = (function()
 -- Fax — based on Fluent by dawid (MIT)
 --[[
 MIT License
@@ -64,7 +63,13 @@ nodes[36] = { Name = "Signal", children = {} }
 nodes[37] = { Name = "SingleMotor", children = {} }
 nodes[38] = { Name = "Spring", children = {} }
 nodes[39] = { Name = "Themes", children = {} }
-nodes[40] = { Name = "Fax", children = {} }
+nodes[40] = { Name = "Amethyst", children = {} }
+nodes[41] = { Name = "Aqua", children = {} }
+nodes[42] = { Name = "Dark", children = {} }
+nodes[43] = { Name = "Darker", children = {} }
+nodes[44] = { Name = "Fax", children = {} }
+nodes[45] = { Name = "Light", children = {} }
+nodes[46] = { Name = "Rose", children = {} }
 for _, node in ipairs(nodes) do
  function node:GetChildren() return self.children end
 end
@@ -183,8 +188,26 @@ nodes[39].Parent = nodes[1]
 nodes[1]["Themes"] = nodes[39]
 table.insert(nodes[1].children, nodes[39])
 nodes[40].Parent = nodes[39]
-nodes[39]["Fax"] = nodes[40]
+nodes[39]["Amethyst"] = nodes[40]
 table.insert(nodes[39].children, nodes[40])
+nodes[41].Parent = nodes[39]
+nodes[39]["Aqua"] = nodes[41]
+table.insert(nodes[39].children, nodes[41])
+nodes[42].Parent = nodes[39]
+nodes[39]["Dark"] = nodes[42]
+table.insert(nodes[39].children, nodes[42])
+nodes[43].Parent = nodes[39]
+nodes[39]["Darker"] = nodes[43]
+table.insert(nodes[39].children, nodes[43])
+nodes[44].Parent = nodes[39]
+nodes[39]["Fax"] = nodes[44]
+table.insert(nodes[39].children, nodes[44])
+nodes[45].Parent = nodes[39]
+nodes[39]["Light"] = nodes[45]
+table.insert(nodes[39].children, nodes[45])
+nodes[46].Parent = nodes[39]
+nodes[39]["Rose"] = nodes[46]
+table.insert(nodes[39].children, nodes[46])
 local nativeRequire = require
 local function bundledRequire(node)
     if not loaders[node] then return nativeRequire(node) end
@@ -313,7 +336,7 @@ function Library:CreateWindow(Config)
 	Library.MinimizeKey = Config.MinimizeKey or Enum.KeyCode.LeftControl
 	Library.UseAcrylic = Config.Acrylic or false
 	Library.Acrylic = Config.Acrylic or false
-	Library.Theme = "Fax"
+	Library.Theme = table.find(Library.Themes, Config.Theme) and Config.Theme or "Fax"
 	if Config.Acrylic then
 		Acrylic.init()
 	end
@@ -2137,6 +2160,7 @@ return function(Config)
 	end)
 
 	Creator.AddSignal(UserInputService.InputBegan, function(Input)
+		if Library.PickingKeybind then return end
 		if
 			type(Library.MinimizeKeybind) == "table"
 			and Library.MinimizeKeybind.Type == "Keybind"
@@ -3622,23 +3646,32 @@ function Element:New(Idx, Config)
 	}
 
 	local Picking = false
+    local Destroyed = false
+    local ReleaseInput = nil
+    local Inline = Config.InlineFrame ~= nil
+    local function DisplayKey(Key)
+        return (Key == nil or Key == "" or Key == "None") and "Set Keybind" or Key
+    end
 
-	local KeybindFrame = require(Components.Element)(Config.Title, Config.Description, self.Container, true)
+	local KeybindFrame = Config.InlineFrame or require(Components.Element)(Config.Title, Config.Description, self.Container, true)
 
-	Keybind.SetTitle = KeybindFrame.SetTitle
-	Keybind.SetDesc = KeybindFrame.SetDesc
+    if not Inline then
+        Keybind.SetTitle = KeybindFrame.SetTitle
+        Keybind.SetDesc = KeybindFrame.SetDesc
+    end
 
 	local KeybindDisplayLabel = New("TextLabel", {
 		FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal),
-		Text = Config.Default,
+		Text = DisplayKey(Config.Default),
 		TextColor3 = Color3.fromRGB(240, 240, 240),
-		TextSize = 16,
+		TextSize = Inline and 12 or 16,
 		TextXAlignment = Enum.TextXAlignment.Center,
-		Size = UDim2.new(0, 0, 0, 14),
-		Position = UDim2.new(0, 0, 0.5, 0),
+		Size = Inline and UDim2.new(1, -24, 0, 16) or UDim2.new(0, 0, 0, 14),
+		Position = UDim2.new(0, Inline and 24 or 0, 0.5, 0),
 		AnchorPoint = Vector2.new(0, 0.5),
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-		AutomaticSize = Enum.AutomaticSize.X,
+		AutomaticSize = Inline and Enum.AutomaticSize.None or Enum.AutomaticSize.X,
+		TextTruncate = Enum.TextTruncate.AtEnd,
 		BackgroundTransparency = 1,
 		ThemeTag = {
 			TextColor3 = "Text",
@@ -3646,12 +3679,13 @@ function Element:New(Idx, Config)
 	})
 
 	local KeybindDisplayFrame = New("TextButton", {
-		Size = UDim2.fromOffset(0, 32),
-		Position = UDim2.new(1, -10, 0.5, 0),
-		AnchorPoint = Vector2.new(1, 0.5),
+		Size = UDim2.fromOffset(Inline and 118 or 0, 32),
+		Position = Inline and UDim2.new(0, 10, 0.5, 0) or UDim2.new(1, -10, 0.5, 0),
+		AnchorPoint = Vector2.new(Inline and 0 or 1, 0.5),
+		Text = "",
 		BackgroundTransparency = 0.9,
 		Parent = KeybindFrame.Frame,
-		AutomaticSize = Enum.AutomaticSize.X,
+		AutomaticSize = Inline and Enum.AutomaticSize.None or Enum.AutomaticSize.X,
 		ThemeTag = {
 			BackgroundColor3 = "Keybind",
 		},
@@ -3673,7 +3707,23 @@ function Element:New(Idx, Config)
 		KeybindDisplayLabel,
 	})
 
-	KeybindFrame:StackControl(KeybindDisplayFrame)
+    if Inline then
+        New("ImageLabel", {
+            Parent = KeybindDisplayFrame,
+            BackgroundTransparency = 1,
+            Size = UDim2.fromOffset(16, 16),
+            Position = UDim2.new(0, 0, 0.5, 0),
+            AnchorPoint = Vector2.new(0, 0.5),
+            Image = Library:GetIcon("keyboard"),
+            ThemeTag = { ImageColor3 = "SubText" },
+        })
+        KeybindFrame.LabelHolder.Position = UDim2.fromOffset(138, 0)
+        KeybindFrame.LabelHolder.Size = UDim2.new(1, -196, 0, 0)
+        KeybindFrame.TitleLabel.Size = UDim2.new(1, 0, 0, 24)
+        KeybindFrame.DescLabel.Size = UDim2.new(1, 0, 0, 14)
+    else
+        KeybindFrame:StackControl(KeybindDisplayFrame)
+    end
 	function Keybind:GetState()
 		if UserInputService:GetFocusedTextBox() and Keybind.Mode ~= "Always" then
 			return false
@@ -3682,7 +3732,7 @@ function Element:New(Idx, Config)
 		if Keybind.Mode == "Always" then
 			return true
 		elseif Keybind.Mode == "Hold" then
-			if Keybind.Value == "None" then
+			if Keybind.Value == "None" or Keybind.Value == "" then
 				return false
 			end
 
@@ -3701,10 +3751,10 @@ function Element:New(Idx, Config)
 	end
 
 	function Keybind:SetValue(Key, Mode)
-		Key = Key or Keybind.Key
+		Key = Key or Keybind.Value
 		Mode = Mode or Keybind.Mode
 
-		KeybindDisplayLabel.Text = Key
+		KeybindDisplayLabel.Text = DisplayKey(Key)
 		Keybind.Value = Key
 		Keybind.Mode = Mode
 	end
@@ -3724,57 +3774,72 @@ function Element:New(Idx, Config)
 	end
 
 	function Keybind:Destroy()
-		KeybindFrame:Destroy()
+        Destroyed = true
+        if Library.PickingKeybind == Keybind then Library.PickingKeybind = nil end
+        if Inline then
+            KeybindDisplayFrame:Destroy()
+            KeybindFrame.LabelHolder.Position = UDim2.fromOffset(10, 0)
+            KeybindFrame.LabelHolder.Size = UDim2.new(1, -28, 0, 0)
+            KeybindFrame.TitleLabel.Size = UDim2.new(1, -58, 0, 24)
+            KeybindFrame.DescLabel.Size = UDim2.new(1, -54, 0, 14)
+        else
+            KeybindFrame:Destroy()
+        end
 		Library.Options[Idx] = nil
 	end
 
-	Creator.AddSignal(KeybindDisplayFrame.InputBegan, function(Input)
-		if
-			Input.UserInputType == Enum.UserInputType.MouseButton1
-			or Input.UserInputType == Enum.UserInputType.Touch
-		then
-			Picking = true
-			KeybindDisplayLabel.Text = "..."
+    Creator.AddSignal(KeybindDisplayFrame.InputBegan, function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+            KeybindFrame.KeybindInputAt = os.clock()
+        end
+    end)
 
-			wait(0.2)
+    function Keybind:CancelCapture()
+        Picking = false
+        ReleaseInput = nil
+        if Library.PickingKeybind == self then Library.PickingKeybind = nil end
+        if not Destroyed then KeybindDisplayLabel.Text = DisplayKey(self.Value) end
+    end
 
-			local Event
-			Event = UserInputService.InputBegan:Connect(function(Input)
-				local Key
+    Creator.AddSignal(KeybindDisplayFrame.Activated, function()
+        if Destroyed then return end
+        if Library.PickingKeybind then Library.PickingKeybind:CancelCapture() end
+        Picking = true
+        Library.PickingKeybind = Keybind
+        KeybindDisplayLabel.Text = "Press a key"
+    end)
 
-				if Input.UserInputType == Enum.UserInputType.Keyboard then
-					Key = Input.KeyCode.Name
-				elseif Input.UserInputType == Enum.UserInputType.MouseButton1 then
-					Key = "MouseLeft"
-				elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
-					Key = "MouseRight"
-				end
+    Creator.AddSignal(UserInputService.InputBegan, function(Input)
+        if Destroyed or not Picking or ReleaseInput then return end
+        local Key
+        if Input.UserInputType == Enum.UserInputType.Keyboard then
+            Key = Input.KeyCode.Name
+            if Key == "Unknown" then return end
+        elseif Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Key = "MouseLeft"
+        elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
+            Key = "MouseRight"
+        else
+            return
+        end
+        -- Keep capture active until release so binding a key cannot trigger any hotkey.
+        ReleaseInput = Input
+        if Key == "Escape" then return end
+        if Key == "Backspace" or Key == "Delete" then Key = "" end
+        Keybind:SetValue(Key)
+        Library:SafeCallback(Keybind.ChangedCallback, Key)
+        Library:SafeCallback(Keybind.Changed, Key)
+    end)
 
-				local EndedEvent
-				EndedEvent = UserInputService.InputEnded:Connect(function(Input)
-					if
-						Input.KeyCode.Name == Key
-						or Key == "MouseLeft" and Input.UserInputType == Enum.UserInputType.MouseButton1
-						or Key == "MouseRight" and Input.UserInputType == Enum.UserInputType.MouseButton2
-					then
-						Picking = false
-
-						KeybindDisplayLabel.Text = Key
-						Keybind.Value = Key
-
-						Library:SafeCallback(Keybind.ChangedCallback, Input.KeyCode or Input.UserInputType)
-						Library:SafeCallback(Keybind.Changed, Input.KeyCode or Input.UserInputType)
-
-						Event:Disconnect()
-						EndedEvent:Disconnect()
-					end
-				end)
-			end)
-		end
-	end)
+    Creator.AddSignal(UserInputService.InputEnded, function(Input)
+        if ReleaseInput == Input then Keybind:CancelCapture() end
+    end)
+    Creator.AddSignal(UserInputService.WindowFocusReleased, function()
+        if Picking then Keybind:CancelCapture() end
+    end)
 
 	Creator.AddSignal(UserInputService.InputBegan, function(Input)
-		if not Picking and not UserInputService:GetFocusedTextBox() then
+		if not Destroyed and not Library.PickingKeybind and not UserInputService:GetFocusedTextBox() then
 			if Keybind.Mode == "Toggle" then
 				local Key = Keybind.Value
 
@@ -4026,6 +4091,15 @@ function Element:New(Idx, Config)
 	Toggle.SetTitle = ToggleFrame.SetTitle
 	Toggle.SetDesc = ToggleFrame.SetDesc
 
+    -- Reuse the keybind element on the left of this toggle, with no extra row.
+    function Toggle:AddKeybind(KeybindIdx, KeybindConfig)
+        if self.Keybind then self.Keybind:Destroy() end
+        local ConfigCopy = table.clone(KeybindConfig)
+        ConfigCopy.InlineFrame = ToggleFrame
+        self.Keybind = require(Root.Elements.Keybind).New({ Library = Library }, KeybindIdx, ConfigCopy)
+        return self.Keybind
+    end
+
 	local ToggleCircle = New("ImageLabel", {
 		AnchorPoint = Vector2.new(0, 0.5),
 		Size = UDim2.fromOffset(14, 14),
@@ -4089,11 +4163,13 @@ function Element:New(Idx, Config)
 	end
 
 	function Toggle:Destroy()
+		if self.Keybind then self.Keybind:Destroy() end
 		ToggleFrame:Destroy()
 		Library.Options[Idx] = nil
 	end
 
 	Creator.AddSignal(ToggleFrame.Frame.MouseButton1Click, function()
+        if Library.PickingKeybind or (ToggleFrame.KeybindInputAt and os.clock() - ToggleFrame.KeybindInputAt < 0.3) then return end
 		Toggle:SetValue(not Toggle.Value)
 	end)
 
@@ -5433,10 +5509,202 @@ return Spring
 
 end
 loaders[nodes[39]] = function(script, require)
-return { Names = { "Fax" }, Fax = require(script.Fax) }
+return {
+    Names = { "Fax", "Dark", "Darker", "Light", "Aqua", "Amethyst", "Rose" },
+    Fax = require(script.Fax),
+    Dark = require(script.Dark),
+    Darker = require(script.Darker),
+    Light = require(script.Light),
+    Aqua = require(script.Aqua),
+    Amethyst = require(script.Amethyst),
+    Rose = require(script.Rose),
+}
 
 end
 loaders[nodes[40]] = function(script, require)
+return {
+	Name = "Amethyst",
+	Accent = Color3.fromRGB(97, 62, 167),
+
+	AcrylicMain = Color3.fromRGB(20, 20, 20),
+	AcrylicBorder = Color3.fromRGB(110, 90, 130),
+	AcrylicGradient = ColorSequence.new(Color3.fromRGB(85, 57, 139), Color3.fromRGB(40, 25, 65)),
+	AcrylicNoise = 0.92,
+
+	TitleBarLine = Color3.fromRGB(95, 75, 110),
+	Tab = Color3.fromRGB(160, 140, 180),
+
+	Element = Color3.fromRGB(140, 120, 160),
+	ElementBorder = Color3.fromRGB(60, 50, 70),
+	InElementBorder = Color3.fromRGB(100, 90, 110),
+	ElementTransparency = 0.87,
+
+	ToggleSlider = Color3.fromRGB(140, 120, 160),
+	ToggleToggled = Color3.fromRGB(0, 0, 0),
+
+	SliderRail = Color3.fromRGB(140, 120, 160),
+
+	DropdownFrame = Color3.fromRGB(170, 160, 200),
+	DropdownHolder = Color3.fromRGB(60, 45, 80),
+	DropdownBorder = Color3.fromRGB(50, 40, 65),
+	DropdownOption = Color3.fromRGB(140, 120, 160),
+
+	Keybind = Color3.fromRGB(140, 120, 160),
+
+	Input = Color3.fromRGB(140, 120, 160),
+	InputFocused = Color3.fromRGB(20, 10, 30),
+	InputIndicator = Color3.fromRGB(170, 150, 190),
+
+	Dialog = Color3.fromRGB(60, 45, 80),
+	DialogHolder = Color3.fromRGB(45, 30, 65),
+	DialogHolderLine = Color3.fromRGB(40, 25, 60),
+	DialogButton = Color3.fromRGB(60, 45, 80),
+	DialogButtonBorder = Color3.fromRGB(95, 80, 110),
+	DialogBorder = Color3.fromRGB(85, 70, 100),
+	DialogInput = Color3.fromRGB(70, 55, 85),
+	DialogInputLine = Color3.fromRGB(175, 160, 190),
+
+	Text = Color3.fromRGB(240, 240, 240),
+	SubText = Color3.fromRGB(170, 170, 170),
+	Hover = Color3.fromRGB(140, 120, 160),
+	HoverChange = 0.04,
+}
+
+end
+loaders[nodes[41]] = function(script, require)
+return {
+	Name = "Aqua",
+	Accent = Color3.fromRGB(60, 165, 165),
+
+	AcrylicMain = Color3.fromRGB(20, 20, 20),
+	AcrylicBorder = Color3.fromRGB(50, 100, 100),
+	AcrylicGradient = ColorSequence.new(Color3.fromRGB(60, 140, 140), Color3.fromRGB(40, 80, 80)),
+	AcrylicNoise = 0.92,
+
+	TitleBarLine = Color3.fromRGB(60, 120, 120),
+	Tab = Color3.fromRGB(140, 180, 180),
+
+	Element = Color3.fromRGB(110, 160, 160),
+	ElementBorder = Color3.fromRGB(40, 70, 70),
+	InElementBorder = Color3.fromRGB(80, 110, 110),
+	ElementTransparency = 0.84,
+
+	ToggleSlider = Color3.fromRGB(110, 160, 160),
+	ToggleToggled = Color3.fromRGB(0, 0, 0),
+
+	SliderRail = Color3.fromRGB(110, 160, 160),
+
+	DropdownFrame = Color3.fromRGB(160, 200, 200),
+	DropdownHolder = Color3.fromRGB(40, 80, 80),
+	DropdownBorder = Color3.fromRGB(40, 65, 65),
+	DropdownOption = Color3.fromRGB(110, 160, 160),
+
+	Keybind = Color3.fromRGB(110, 160, 160),
+
+	Input = Color3.fromRGB(110, 160, 160),
+	InputFocused = Color3.fromRGB(20, 10, 30),
+	InputIndicator = Color3.fromRGB(130, 170, 170),
+
+	Dialog = Color3.fromRGB(40, 80, 80),
+	DialogHolder = Color3.fromRGB(30, 60, 60),
+	DialogHolderLine = Color3.fromRGB(25, 50, 50),
+	DialogButton = Color3.fromRGB(40, 80, 80),
+	DialogButtonBorder = Color3.fromRGB(80, 110, 110),
+	DialogBorder = Color3.fromRGB(50, 100, 100),
+	DialogInput = Color3.fromRGB(45, 90, 90),
+	DialogInputLine = Color3.fromRGB(130, 170, 170),
+
+	Text = Color3.fromRGB(240, 240, 240),
+	SubText = Color3.fromRGB(170, 170, 170),
+	Hover = Color3.fromRGB(110, 160, 160),
+	HoverChange = 0.04,
+}
+
+end
+loaders[nodes[42]] = function(script, require)
+return {
+	Name = "Dark",
+	Accent = Color3.fromRGB(96, 205, 255),
+
+	AcrylicMain = Color3.fromRGB(60, 60, 60),
+	AcrylicBorder = Color3.fromRGB(90, 90, 90),
+	AcrylicGradient = ColorSequence.new(Color3.fromRGB(40, 40, 40), Color3.fromRGB(40, 40, 40)),
+	AcrylicNoise = 0.9,
+
+	TitleBarLine = Color3.fromRGB(75, 75, 75),
+	Tab = Color3.fromRGB(120, 120, 120),
+
+	Element = Color3.fromRGB(120, 120, 120),
+	ElementBorder = Color3.fromRGB(35, 35, 35),
+	InElementBorder = Color3.fromRGB(90, 90, 90),
+	ElementTransparency = 0.87,
+
+	ToggleSlider = Color3.fromRGB(120, 120, 120),
+	ToggleToggled = Color3.fromRGB(0, 0, 0),
+
+	SliderRail = Color3.fromRGB(120, 120, 120),
+
+	DropdownFrame = Color3.fromRGB(160, 160, 160),
+	DropdownHolder = Color3.fromRGB(45, 45, 45),
+	DropdownBorder = Color3.fromRGB(35, 35, 35),
+	DropdownOption = Color3.fromRGB(120, 120, 120),
+
+	Keybind = Color3.fromRGB(120, 120, 120),
+
+	Input = Color3.fromRGB(160, 160, 160),
+	InputFocused = Color3.fromRGB(10, 10, 10),
+	InputIndicator = Color3.fromRGB(150, 150, 150),
+
+	Dialog = Color3.fromRGB(45, 45, 45),
+	DialogHolder = Color3.fromRGB(35, 35, 35),
+	DialogHolderLine = Color3.fromRGB(30, 30, 30),
+	DialogButton = Color3.fromRGB(45, 45, 45),
+	DialogButtonBorder = Color3.fromRGB(80, 80, 80),
+	DialogBorder = Color3.fromRGB(70, 70, 70),
+	DialogInput = Color3.fromRGB(55, 55, 55),
+	DialogInputLine = Color3.fromRGB(160, 160, 160),
+
+	Text = Color3.fromRGB(240, 240, 240),
+	SubText = Color3.fromRGB(170, 170, 170),
+	Hover = Color3.fromRGB(120, 120, 120),
+	HoverChange = 0.07,
+}
+
+end
+loaders[nodes[43]] = function(script, require)
+return {
+	Name = "Darker",
+	Accent = Color3.fromRGB(72, 138, 182),
+
+	AcrylicMain = Color3.fromRGB(30, 30, 30),
+	AcrylicBorder = Color3.fromRGB(60, 60, 60),
+	AcrylicGradient = ColorSequence.new(Color3.fromRGB(25, 25, 25), Color3.fromRGB(15, 15, 15)),
+	AcrylicNoise = 0.94,
+
+	TitleBarLine = Color3.fromRGB(65, 65, 65),
+	Tab = Color3.fromRGB(100, 100, 100),
+
+	Element = Color3.fromRGB(70, 70, 70),
+	ElementBorder = Color3.fromRGB(25, 25, 25),
+	InElementBorder = Color3.fromRGB(55, 55, 55),
+	ElementTransparency = 0.82,
+
+	DropdownFrame = Color3.fromRGB(120, 120, 120),
+	DropdownHolder = Color3.fromRGB(35, 35, 35),
+	DropdownBorder = Color3.fromRGB(25, 25, 25),
+
+	Dialog = Color3.fromRGB(35, 35, 35),
+	DialogHolder = Color3.fromRGB(25, 25, 25),
+	DialogHolderLine = Color3.fromRGB(20, 20, 20),
+	DialogButton = Color3.fromRGB(35, 35, 35),
+	DialogButtonBorder = Color3.fromRGB(55, 55, 55),
+	DialogBorder = Color3.fromRGB(50, 50, 50),
+	DialogInput = Color3.fromRGB(45, 45, 45),
+	DialogInputLine = Color3.fromRGB(120, 120, 120),
+}
+
+end
+loaders[nodes[44]] = function(script, require)
 return {
     Name = "Fax",
     Accent = Color3.fromRGB(155, 112, 224),
@@ -5480,49 +5748,104 @@ return {
 }
 
 end
-return bundledRequire(nodes[1])
+loaders[nodes[45]] = function(script, require)
+return {
+	Name = "Light",
+	Accent = Color3.fromRGB(0, 103, 192),
 
-end)();
-(function(...)
--- Receives the library; this file contains only demonstration controls.
-local Fax = ...
-assert(Fax, "Load Fax.lua and pass the returned library to this demo")
-local Window = Fax:CreateWindow({
-    Title = "Fax",
-    SubTitle = "personal edition / 01",
-    Size = UDim2.fromOffset(800, 600),
-    TabWidth = 190,
-    Theme = "Fax",
-    Acrylic = false,
-    MinimizeKey = Enum.KeyCode.RightControl,
-})
-local Home = Window:AddTab({ Title = "Visao geral", Icon = "home" })
-local Controls = Window:AddTab({ Title = "Componentes", Icon = "sliders-horizontal" })
-local Settings = Window:AddTab({ Title = "Preferencias", Icon = "settings" })
-Home:AddParagraph({ Title = "Menos luz. Mais personalidade.", Content = "Preto profundo, detalhes violeta e um degrade discreto.\nA biblioteca Fax completa, com uma identidade sua." })
-Home:AddParagraph({ Title = "Seu proximo script comeca aqui", Content = "Abas, controles e notificacoes prontos para conectar as suas funcoes. Esta demonstracao altera apenas a interface." })
-Home:AddButton({ Title = "Testar notificacao", Description = "Uma previa dos avisos da interface", Callback = function()
-    Fax:Notify({ Title = "Fax", Content = "Tudo pronto para criar.", SubContent = "Sua biblioteca. Seu estilo.", Duration = 4 })
-end })
-Home:AddButton({ Title = "Explorar componentes", Description = "Veja os controles em funcionamento", Callback = function() Window:SelectTab(2) end })
-Controls:AddToggle("DemoToggle", { Title = "Ativar demonstracao", Description = "Controle independente do jogo", Default = true })
-Controls:AddSlider("DemoIntensity", { Title = "Intensidade de exemplo", Default = 65, Min = 0, Max = 100, Rounding = 0 })
-Controls:AddDropdown("DemoProfile", { Title = "Perfil", Values = { "Pessoal", "Criativo", "Minimalista" }, Multi = false, Default = 1 })
-Controls:AddInput("DemoName", { Title = "Nome do projeto", Default = "Meu projeto", Placeholder = "Digite um nome", Numeric = false, Finished = true })
-Controls:AddColorpicker("DemoColor", { Title = "Cor de exemplo", Default = Color3.fromRGB(155,112,224) })
-Controls:AddButton({ Title = "Abrir dialogo", Callback = function()
-    Window:Dialog({ Title = "Um toque pessoal", Content = "Este e um exemplo de dialogo da Fax.", Buttons = {
-        { Title = "Entendi", Callback = function() end },
-        { Title = "Fechar", Callback = function() end },
-    } })
-end })
-Settings:AddToggle("Transparency", { Title = "Fundo translucido", Default = false, Callback = function(value) Fax:ToggleTransparency(value) end })
-if not game:GetService("UserInputService").TouchEnabled then
-    Settings:AddKeybind("MenuKey", { Title = "Mostrar / ocultar", Default = "RightControl", Mode = "Toggle" })
-    Fax.MinimizeKeybind = Fax.Options.MenuKey
+	AcrylicMain = Color3.fromRGB(200, 200, 200),
+	AcrylicBorder = Color3.fromRGB(120, 120, 120),
+	AcrylicGradient = ColorSequence.new(Color3.fromRGB(255, 255, 255), Color3.fromRGB(255, 255, 255)),
+	AcrylicNoise = 0.96,
+
+	TitleBarLine = Color3.fromRGB(160, 160, 160),
+	Tab = Color3.fromRGB(90, 90, 90),
+
+	Element = Color3.fromRGB(255, 255, 255),
+	ElementBorder = Color3.fromRGB(180, 180, 180),
+	InElementBorder = Color3.fromRGB(150, 150, 150),
+	ElementTransparency = 0.65,
+
+	ToggleSlider = Color3.fromRGB(40, 40, 40),
+	ToggleToggled = Color3.fromRGB(255, 255, 255),
+
+	SliderRail = Color3.fromRGB(40, 40, 40),
+
+	DropdownFrame = Color3.fromRGB(200, 200, 200),
+	DropdownHolder = Color3.fromRGB(240, 240, 240),
+	DropdownBorder = Color3.fromRGB(200, 200, 200),
+	DropdownOption = Color3.fromRGB(150, 150, 150),
+
+	Keybind = Color3.fromRGB(120, 120, 120),
+
+	Input = Color3.fromRGB(200, 200, 200),
+	InputFocused = Color3.fromRGB(100, 100, 100),
+	InputIndicator = Color3.fromRGB(80, 80, 80),
+
+	Dialog = Color3.fromRGB(255, 255, 255),
+	DialogHolder = Color3.fromRGB(240, 240, 240),
+	DialogHolderLine = Color3.fromRGB(228, 228, 228),
+	DialogButton = Color3.fromRGB(255, 255, 255),
+	DialogButtonBorder = Color3.fromRGB(190, 190, 190),
+	DialogBorder = Color3.fromRGB(140, 140, 140),
+	DialogInput = Color3.fromRGB(250, 250, 250),
+	DialogInputLine = Color3.fromRGB(160, 160, 160),
+
+	Text = Color3.fromRGB(0, 0, 0),
+	SubText = Color3.fromRGB(40, 40, 40),
+	Hover = Color3.fromRGB(50, 50, 50),
+	HoverChange = 0.16,
+}
+
 end
-Settings:AddParagraph({ Title = "Fax", Content = "Tema exclusivo preto e violeta.\nNo PC: Right Control. No celular: botao Fax para reabrir." })
-Window:SelectTab(1)
-return Window
+loaders[nodes[46]] = function(script, require)
+return {
+	Name = "Rose",
+	Accent = Color3.fromRGB(180, 55, 90),
 
-end)(Fax)
+	AcrylicMain = Color3.fromRGB(40, 40, 40),
+	AcrylicBorder = Color3.fromRGB(130, 90, 110),
+	AcrylicGradient = ColorSequence.new(Color3.fromRGB(190, 60, 135), Color3.fromRGB(165, 50, 70)),
+	AcrylicNoise = 0.92,
+
+	TitleBarLine = Color3.fromRGB(140, 85, 105),
+	Tab = Color3.fromRGB(180, 140, 160),
+
+	Element = Color3.fromRGB(200, 120, 170),
+	ElementBorder = Color3.fromRGB(110, 70, 85),
+	InElementBorder = Color3.fromRGB(120, 90, 90),
+	ElementTransparency = 0.86,
+
+	ToggleSlider = Color3.fromRGB(200, 120, 170),
+	ToggleToggled = Color3.fromRGB(0, 0, 0),
+
+	SliderRail = Color3.fromRGB(200, 120, 170),
+
+	DropdownFrame = Color3.fromRGB(200, 160, 180),
+	DropdownHolder = Color3.fromRGB(120, 50, 75),
+	DropdownBorder = Color3.fromRGB(90, 40, 55),
+	DropdownOption = Color3.fromRGB(200, 120, 170),
+
+	Keybind = Color3.fromRGB(200, 120, 170),
+
+	Input = Color3.fromRGB(200, 120, 170),
+	InputFocused = Color3.fromRGB(20, 10, 30),
+	InputIndicator = Color3.fromRGB(170, 150, 190),
+
+	Dialog = Color3.fromRGB(120, 50, 75),
+	DialogHolder = Color3.fromRGB(95, 40, 60),
+	DialogHolderLine = Color3.fromRGB(90, 35, 55),
+	DialogButton = Color3.fromRGB(120, 50, 75),
+	DialogButtonBorder = Color3.fromRGB(155, 90, 115),
+	DialogBorder = Color3.fromRGB(100, 70, 90),
+	DialogInput = Color3.fromRGB(135, 55, 80),
+	DialogInputLine = Color3.fromRGB(190, 160, 180),
+
+	Text = Color3.fromRGB(240, 240, 240),
+	SubText = Color3.fromRGB(170, 170, 170),
+	Hover = Color3.fromRGB(200, 120, 170),
+	HoverChange = 0.04,
+}
+
+end
+return bundledRequire(nodes[1])
