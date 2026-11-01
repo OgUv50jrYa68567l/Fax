@@ -52,24 +52,25 @@ nodes[25] = { Name = "Paragraph", children = {} }
 nodes[26] = { Name = "Slider", children = {} }
 nodes[27] = { Name = "Toggle", children = {} }
 nodes[28] = { Name = "Icons", children = {} }
-nodes[29] = { Name = "Packages", children = {} }
-nodes[30] = { Name = "Flipper", children = {} }
-nodes[31] = { Name = "BaseMotor", children = {} }
-nodes[32] = { Name = "GroupMotor", children = {} }
-nodes[33] = { Name = "Instant", children = {} }
-nodes[34] = { Name = "isMotor", children = {} }
-nodes[35] = { Name = "Linear", children = {} }
-nodes[36] = { Name = "Signal", children = {} }
-nodes[37] = { Name = "SingleMotor", children = {} }
-nodes[38] = { Name = "Spring", children = {} }
-nodes[39] = { Name = "Themes", children = {} }
-nodes[40] = { Name = "Amethyst", children = {} }
-nodes[41] = { Name = "Aqua", children = {} }
-nodes[42] = { Name = "Dark", children = {} }
-nodes[43] = { Name = "Darker", children = {} }
-nodes[44] = { Name = "Fax", children = {} }
-nodes[45] = { Name = "Light", children = {} }
-nodes[46] = { Name = "Rose", children = {} }
+nodes[29] = { Name = "MouseController", children = {} }
+nodes[30] = { Name = "Packages", children = {} }
+nodes[31] = { Name = "Flipper", children = {} }
+nodes[32] = { Name = "BaseMotor", children = {} }
+nodes[33] = { Name = "GroupMotor", children = {} }
+nodes[34] = { Name = "Instant", children = {} }
+nodes[35] = { Name = "isMotor", children = {} }
+nodes[36] = { Name = "Linear", children = {} }
+nodes[37] = { Name = "Signal", children = {} }
+nodes[38] = { Name = "SingleMotor", children = {} }
+nodes[39] = { Name = "Spring", children = {} }
+nodes[40] = { Name = "Themes", children = {} }
+nodes[41] = { Name = "Amethyst", children = {} }
+nodes[42] = { Name = "Aqua", children = {} }
+nodes[43] = { Name = "Dark", children = {} }
+nodes[44] = { Name = "Darker", children = {} }
+nodes[45] = { Name = "Fax", children = {} }
+nodes[46] = { Name = "Light", children = {} }
+nodes[47] = { Name = "Rose", children = {} }
 for _, node in ipairs(nodes) do
  function node:GetChildren() return self.children end
 end
@@ -155,59 +156,62 @@ nodes[28].Parent = nodes[1]
 nodes[1]["Icons"] = nodes[28]
 table.insert(nodes[1].children, nodes[28])
 nodes[29].Parent = nodes[1]
-nodes[1]["Packages"] = nodes[29]
+nodes[1]["MouseController"] = nodes[29]
 table.insert(nodes[1].children, nodes[29])
-nodes[30].Parent = nodes[29]
-nodes[29]["Flipper"] = nodes[30]
-table.insert(nodes[29].children, nodes[30])
+nodes[30].Parent = nodes[1]
+nodes[1]["Packages"] = nodes[30]
+table.insert(nodes[1].children, nodes[30])
 nodes[31].Parent = nodes[30]
-nodes[30]["BaseMotor"] = nodes[31]
+nodes[30]["Flipper"] = nodes[31]
 table.insert(nodes[30].children, nodes[31])
-nodes[32].Parent = nodes[30]
-nodes[30]["GroupMotor"] = nodes[32]
-table.insert(nodes[30].children, nodes[32])
-nodes[33].Parent = nodes[30]
-nodes[30]["Instant"] = nodes[33]
-table.insert(nodes[30].children, nodes[33])
-nodes[34].Parent = nodes[30]
-nodes[30]["isMotor"] = nodes[34]
-table.insert(nodes[30].children, nodes[34])
-nodes[35].Parent = nodes[30]
-nodes[30]["Linear"] = nodes[35]
-table.insert(nodes[30].children, nodes[35])
-nodes[36].Parent = nodes[30]
-nodes[30]["Signal"] = nodes[36]
-table.insert(nodes[30].children, nodes[36])
-nodes[37].Parent = nodes[30]
-nodes[30]["SingleMotor"] = nodes[37]
-table.insert(nodes[30].children, nodes[37])
-nodes[38].Parent = nodes[30]
-nodes[30]["Spring"] = nodes[38]
-table.insert(nodes[30].children, nodes[38])
-nodes[39].Parent = nodes[1]
-nodes[1]["Themes"] = nodes[39]
-table.insert(nodes[1].children, nodes[39])
-nodes[40].Parent = nodes[39]
-nodes[39]["Amethyst"] = nodes[40]
-table.insert(nodes[39].children, nodes[40])
-nodes[41].Parent = nodes[39]
-nodes[39]["Aqua"] = nodes[41]
-table.insert(nodes[39].children, nodes[41])
-nodes[42].Parent = nodes[39]
-nodes[39]["Dark"] = nodes[42]
-table.insert(nodes[39].children, nodes[42])
-nodes[43].Parent = nodes[39]
-nodes[39]["Darker"] = nodes[43]
-table.insert(nodes[39].children, nodes[43])
-nodes[44].Parent = nodes[39]
-nodes[39]["Fax"] = nodes[44]
-table.insert(nodes[39].children, nodes[44])
-nodes[45].Parent = nodes[39]
-nodes[39]["Light"] = nodes[45]
-table.insert(nodes[39].children, nodes[45])
-nodes[46].Parent = nodes[39]
-nodes[39]["Rose"] = nodes[46]
-table.insert(nodes[39].children, nodes[46])
+nodes[32].Parent = nodes[31]
+nodes[31]["BaseMotor"] = nodes[32]
+table.insert(nodes[31].children, nodes[32])
+nodes[33].Parent = nodes[31]
+nodes[31]["GroupMotor"] = nodes[33]
+table.insert(nodes[31].children, nodes[33])
+nodes[34].Parent = nodes[31]
+nodes[31]["Instant"] = nodes[34]
+table.insert(nodes[31].children, nodes[34])
+nodes[35].Parent = nodes[31]
+nodes[31]["isMotor"] = nodes[35]
+table.insert(nodes[31].children, nodes[35])
+nodes[36].Parent = nodes[31]
+nodes[31]["Linear"] = nodes[36]
+table.insert(nodes[31].children, nodes[36])
+nodes[37].Parent = nodes[31]
+nodes[31]["Signal"] = nodes[37]
+table.insert(nodes[31].children, nodes[37])
+nodes[38].Parent = nodes[31]
+nodes[31]["SingleMotor"] = nodes[38]
+table.insert(nodes[31].children, nodes[38])
+nodes[39].Parent = nodes[31]
+nodes[31]["Spring"] = nodes[39]
+table.insert(nodes[31].children, nodes[39])
+nodes[40].Parent = nodes[1]
+nodes[1]["Themes"] = nodes[40]
+table.insert(nodes[1].children, nodes[40])
+nodes[41].Parent = nodes[40]
+nodes[40]["Amethyst"] = nodes[41]
+table.insert(nodes[40].children, nodes[41])
+nodes[42].Parent = nodes[40]
+nodes[40]["Aqua"] = nodes[42]
+table.insert(nodes[40].children, nodes[42])
+nodes[43].Parent = nodes[40]
+nodes[40]["Dark"] = nodes[43]
+table.insert(nodes[40].children, nodes[43])
+nodes[44].Parent = nodes[40]
+nodes[40]["Darker"] = nodes[44]
+table.insert(nodes[40].children, nodes[44])
+nodes[45].Parent = nodes[40]
+nodes[40]["Fax"] = nodes[45]
+table.insert(nodes[40].children, nodes[45])
+nodes[46].Parent = nodes[40]
+nodes[40]["Light"] = nodes[46]
+table.insert(nodes[40].children, nodes[46])
+nodes[47].Parent = nodes[40]
+nodes[40]["Rose"] = nodes[47]
+table.insert(nodes[40].children, nodes[47])
 local nativeRequire = require
 local function bundledRequire(node)
     if not loaders[node] then return nativeRequire(node) end
@@ -224,6 +228,16 @@ local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Camera = game:GetService("Workspace").CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
+local function DetectDevice()
+    if UserInputService.KeyboardEnabled and UserInputService.MouseEnabled then
+        return "Computer"
+    elseif UserInputService.TouchEnabled then
+        return "Mobile/Tablet"
+    elseif UserInputService.GamepadEnabled then
+        return "Console"
+    end
+    return "Unknown"
+end
 
 local Root = script
 local Creator = require(Root.Creator)
@@ -242,6 +256,7 @@ ProtectGui(GUI)
 NotificationModule:Init(GUI)
 
 local Library = {
+    Device = DetectDevice(),
 	Version = "1.1.0",
 
 	OpenFrames = {},
@@ -357,6 +372,7 @@ function Library:CreateWindow(Config)
 		Library:ToggleTransparency(false)
 	end
 
+    if Config.FreeMouse then require(Root.MouseController)(Library, Window) end
 	return Window
 end
 
@@ -901,10 +917,10 @@ function Dialog:Create()
 
 	function NewDialog:Open()
 		require(Root).DialogOpen = true
-		NewDialog.Scale.Scale = 1.1
+		NewDialog.Scale.Scale = (NewDialog.TargetScale or 1) * 1.1
 		TintTransparency(0.75)
 		RootTransparency(0)
-		Scale(1)
+		Scale(NewDialog.TargetScale or 1)
 	end
 
 	function NewDialog:Close()
@@ -1895,7 +1911,7 @@ return function(Config)
 
 	local Window = {
 		Minimized = false,
-        TouchLayout = UserInputService.TouchEnabled,
+        TouchLayout = Library.Device == "Mobile/Tablet",
 		Maximized = false,
 		Size = Config.Size,
 		CurrentPos = 0,
@@ -2534,13 +2550,6 @@ return Element
 end
 loaders[nodes[21]] = function(script, require)
 local UserInputService = game:GetService("UserInputService")
-local TouchInputService = game:GetService("TouchInputService")
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-
-local RenderStepped = RunService.RenderStepped
-local LocalPlayer = Players.LocalPlayer
-local Mouse = LocalPlayer:GetMouse()
 
 local Root = script.Parent.Parent
 local Creator = require(Root.Creator)
@@ -2560,6 +2569,7 @@ function Element:New(Idx, Config)
 	local Colorpicker = {
 		Value = Config.Default,
 		Transparency = Config.Transparency or 0,
+        OutlineTransparency = Config.OutlineTransparency or 0,
 		Type = "Colorpicker",
 		Title = type(Config.Title) == "string" and Config.Title or "Colorpicker",
 		Callback = Config.Callback or function(Color) end,
@@ -2574,11 +2584,17 @@ function Element:New(Idx, Config)
 
 	Colorpicker:SetHSVFromRGB(Colorpicker.Value)
 
-	local ColorpickerFrame = require(Components.Element)(Config.Title, Config.Description, self.Container, true)
+    local Inline = Config.InlineFrame ~= nil
+	local ColorpickerFrame = Config.InlineFrame or require(Components.Element)(Config.Title, Config.Description, self.Container, true)
 
-    ColorpickerFrame.TitleLabel.Size = UDim2.new(1, -58, 0, 24)
-	Colorpicker.SetTitle = ColorpickerFrame.SetTitle
-	Colorpicker.SetDesc = ColorpickerFrame.SetDesc
+    if Inline then
+        ColorpickerFrame.InlineControlInset = 176
+        ColorpickerFrame.LabelHolder.Size = UDim2.new(1, -176, 0, 0)
+    else
+        ColorpickerFrame.TitleLabel.Size = UDim2.new(1, -58, 0, 24)
+        Colorpicker.SetTitle = ColorpickerFrame.SetTitle
+        Colorpicker.SetDesc = ColorpickerFrame.SetDesc
+    end
 
 	local DisplayFrameColor = New("Frame", {
 		Size = UDim2.fromScale(1, 1),
@@ -2586,13 +2602,18 @@ function Element:New(Idx, Config)
 		Parent = ColorpickerFrame.Frame,
 	}, {
 		New("UICorner", {
-			CornerRadius = UDim.new(0, 4),
+			CornerRadius = Inline and UDim.new(1, 0) or UDim.new(0, 4),
 		}),
 	})
 
-	local DisplayFrame = New("ImageLabel", {
+	local DisplayFrame = New("ImageButton", {
+        Name = "ColorButton",
+        Active = true,
+        Selectable = true,
+        AutoButtonColor = false,
+        ZIndex = 3,
 		Size = UDim2.fromOffset(26, 26),
-		Position = UDim2.new(1, -10, 0.5, 0),
+		Position = UDim2.new(1, Inline and -130 or -10, 0.5, 0),
 		AnchorPoint = Vector2.new(1, 0.5),
 		Parent = ColorpickerFrame.Frame,
 		Image = "http://www.roblox.com/asset/?id=14204231522",
@@ -2601,18 +2622,23 @@ function Element:New(Idx, Config)
 		TileSize = UDim2.fromOffset(40, 40),
 	}, {
 		New("UICorner", {
-			CornerRadius = UDim.new(0, 4),
+			CornerRadius = Inline and UDim.new(1, 0) or UDim.new(0, 4),
 		}),
 		DisplayFrameColor,
 	})
+    DisplayFrameColor.ZIndex = 4
 
 	local function CreateColorDialog()
 		local Dialog = require(Components.Dialog):Create()
 		Dialog.Title.Text = Colorpicker.Title
-		Dialog.Root.Size = UDim2.fromOffset(430, 330)
+		Dialog.Root.Size = UDim2.fromOffset(430, Config.OpacityControls and 380 or 330)
+        local Viewport = Library.Window.Root.AbsoluteSize
+        Dialog.TargetScale = math.min(1, math.max(0.3, (Viewport.X - 20) / 430), math.max(0.3, (Viewport.Y - 20) / Dialog.Root.Size.Y.Offset))
 
 		local Hue, Sat, Vib = Colorpicker.Hue, Colorpicker.Sat, Colorpicker.Vib
 		local Transparency = Colorpicker.Transparency
+        local OutlineTransparency = Colorpicker.OutlineTransparency
+        local UseAlpha = Config.Transparency ~= nil and not Config.OpacityControls
 
 		local function CreateInput()
 			local Box = require(Components.Textbox)()
@@ -2769,30 +2795,30 @@ function Element:New(Idx, Config)
 		})
 
 		local HexInput = CreateInput()
-		HexInput.Frame.Position = UDim2.fromOffset(Config.Transparency and 260 or 240, 55)
-		CreateInputLabel("Hex", UDim2.fromOffset(Config.Transparency and 360 or 340, 55))
+		HexInput.Frame.Position = UDim2.fromOffset(UseAlpha and 260 or 240, 55)
+		CreateInputLabel("Hex", UDim2.fromOffset(UseAlpha and 360 or 340, 55))
 
 		local RedInput = CreateInput()
-		RedInput.Frame.Position = UDim2.fromOffset(Config.Transparency and 260 or 240, 95)
-		CreateInputLabel("Red", UDim2.fromOffset(Config.Transparency and 360 or 340, 95))
+		RedInput.Frame.Position = UDim2.fromOffset(UseAlpha and 260 or 240, 95)
+		CreateInputLabel("Red", UDim2.fromOffset(UseAlpha and 360 or 340, 95))
 
 		local GreenInput = CreateInput()
-		GreenInput.Frame.Position = UDim2.fromOffset(Config.Transparency and 260 or 240, 135)
-		CreateInputLabel("Green", UDim2.fromOffset(Config.Transparency and 360 or 340, 135))
+		GreenInput.Frame.Position = UDim2.fromOffset(UseAlpha and 260 or 240, 135)
+		CreateInputLabel("Green", UDim2.fromOffset(UseAlpha and 360 or 340, 135))
 
 		local BlueInput = CreateInput()
-		BlueInput.Frame.Position = UDim2.fromOffset(Config.Transparency and 260 or 240, 175)
-		CreateInputLabel("Blue", UDim2.fromOffset(Config.Transparency and 360 or 340, 175))
+		BlueInput.Frame.Position = UDim2.fromOffset(UseAlpha and 260 or 240, 175)
+		CreateInputLabel("Blue", UDim2.fromOffset(UseAlpha and 360 or 340, 175))
 
 		local AlphaInput
-		if Config.Transparency then
+		if UseAlpha then
 			AlphaInput = CreateInput()
 			AlphaInput.Frame.Position = UDim2.fromOffset(260, 215)
 			CreateInputLabel("Alpha", UDim2.fromOffset(360, 215))
 		end
 
 		local TransparencySlider, TransparencyDrag, TransparencyColor
-		if Config.Transparency then
+		if UseAlpha then
 			local TransparencyDragHolder = New("Frame", {
 				Size = UDim2.new(1, 0, 1, -10),
 				Position = UDim2.fromOffset(0, 5),
@@ -2850,7 +2876,19 @@ function Element:New(Idx, Config)
 			})
 		end
 
-		local function Display()
+        local FillInput, OutlineInput
+        if Config.OpacityControls then
+            CreateInputLabel("Fill opacity (%)", UDim2.fromOffset(20, 265))
+            FillInput = CreateInput()
+            FillInput.Frame.Position = UDim2.fromOffset(135, 265)
+            FillInput.Frame.Size = UDim2.fromOffset(65, 32)
+            CreateInputLabel("Outline opacity (%)", UDim2.fromOffset(215, 265))
+            OutlineInput = CreateInput()
+            OutlineInput.Frame.Position = UDim2.fromOffset(350, 265)
+            OutlineInput.Frame.Size = UDim2.fromOffset(60, 32)
+        end
+
+        local function Display()
 			SatVibMap.BackgroundColor3 = Color3.fromHSV(Hue, 1, 1)
 			HueDrag.Position = UDim2.new(0, -1, Hue, -6)
 			SatCursor.Position = UDim2.new(Sat, 0, 1 - Vib, 0)
@@ -2861,15 +2899,33 @@ function Element:New(Idx, Config)
 			GreenInput.Input.Text = GetRGB()["G"]
 			BlueInput.Input.Text = GetRGB()["B"]
 
-			if Config.Transparency then
-				TransparencyColor.BackgroundColor3 = Color3.fromHSV(Hue, Sat, Vib)
+            if FillInput then
+                FillInput.Input.Text = tostring(math.floor((1 - Transparency) * 100 + 0.5))
+                OutlineInput.Input.Text = tostring(math.floor((1 - OutlineTransparency) * 100 + 0.5))
+                DialogDisplayFrame.BackgroundTransparency = Transparency
+            end
+            if UseAlpha then
+                TransparencyColor.BackgroundColor3 = Color3.fromHSV(Hue, Sat, Vib)
 				DialogDisplayFrame.BackgroundTransparency = Transparency
 				TransparencyDrag.Position = UDim2.new(0, -1, 1 - Transparency, -6)
 				AlphaInput.Input.Text = require(Root):Round((1 - Transparency) * 100, 0) .. "%"
 			end
 		end
 
-		Creator.AddSignal(HexInput.Input.FocusLost, function(Enter)
+        if FillInput then
+            Creator.AddSignal(FillInput.Input.FocusLost, function()
+                local Value = tonumber((FillInput.Input.Text:gsub("%%", "")))
+                if Value then Transparency = 1 - math.clamp(Value, 0, 100) / 100 end
+                Display()
+            end)
+            Creator.AddSignal(OutlineInput.Input.FocusLost, function()
+                local Value = tonumber((OutlineInput.Input.Text:gsub("%%", "")))
+                if Value then OutlineTransparency = 1 - math.clamp(Value, 0, 100) / 100 end
+                Display()
+            end)
+        end
+
+        Creator.AddSignal(HexInput.Input.FocusLost, function(Enter)
 			if Enter then
 				local Success, Result = pcall(Color3.fromHex, HexInput.Input.Text)
 				if Success and typeof(Result) == "Color3" then
@@ -2920,7 +2976,7 @@ function Element:New(Idx, Config)
 			Display()
 		end)
 
-		if Config.Transparency then
+		if UseAlpha then
 			Creator.AddSignal(AlphaInput.Input.FocusLost, function(Enter)
 				if Enter then
 					pcall(function()
@@ -2934,68 +2990,44 @@ function Element:New(Idx, Config)
 			end)
 		end
 
-		Creator.AddSignal(SatVibMap.InputBegan, function(Input)
-			if
-				Input.UserInputType == Enum.UserInputType.MouseButton1
-				or Input.UserInputType == Enum.UserInputType.Touch
-			then
-				while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
-					local MinX = SatVibMap.AbsolutePosition.X
-					local MaxX = MinX + SatVibMap.AbsoluteSize.X
-					local MouseX = math.clamp(Mouse.X, MinX, MaxX)
-
-					local MinY = SatVibMap.AbsolutePosition.Y
-					local MaxY = MinY + SatVibMap.AbsoluteSize.Y
-					local MouseY = math.clamp(Mouse.Y, MinY, MaxY)
-
-					Sat = (MouseX - MinX) / (MaxX - MinX)
-					Vib = 1 - ((MouseY - MinY) / (MaxY - MinY))
-					Display()
-
-					RenderStepped:Wait()
-				end
-			end
-		end)
-
-		Creator.AddSignal(HueSlider.InputBegan, function(Input)
-			if
-				Input.UserInputType == Enum.UserInputType.MouseButton1
-				or Input.UserInputType == Enum.UserInputType.Touch
-			then
-				while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
-					local MinY = HueSlider.AbsolutePosition.Y
-					local MaxY = MinY + HueSlider.AbsoluteSize.Y
-					local MouseY = math.clamp(Mouse.Y, MinY, MaxY)
-
-					Hue = ((MouseY - MinY) / (MaxY - MinY))
-					Display()
-
-					RenderStepped:Wait()
-				end
-			end
-		end)
-
-		if Config.Transparency then
-			Creator.AddSignal(TransparencySlider.InputBegan, function(Input)
-				if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-					while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
-						local MinY = TransparencySlider.AbsolutePosition.Y
-						local MaxY = MinY + TransparencySlider.AbsoluteSize.Y
-						local MouseY = math.clamp(Mouse.Y, MinY, MaxY)
-
-						Transparency = 1 - ((MouseY - MinY) / (MaxY - MinY))
-						Display()
-
-						RenderStepped:Wait()
-					end
-				end
-			end)
-		end
+        local function BindDrag(Control, Update)
+            local ActiveInput
+            Creator.AddSignal(Control.InputBegan, function(Input)
+                if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+                    ActiveInput = Input
+                    Update(Input.Position)
+                end
+            end)
+            Creator.AddSignal(UserInputService.InputChanged, function(Input)
+                if not ActiveInput then return end
+                if Input == ActiveInput or (ActiveInput.UserInputType == Enum.UserInputType.MouseButton1 and Input.UserInputType == Enum.UserInputType.MouseMovement) then
+                    Update(Input.Position)
+                end
+            end)
+            Creator.AddSignal(UserInputService.InputEnded, function(Input)
+                if Input == ActiveInput then ActiveInput = nil end
+            end)
+        end
+        BindDrag(SatVibMap, function(Position)
+            Sat = math.clamp((Position.X - SatVibMap.AbsolutePosition.X) / SatVibMap.AbsoluteSize.X, 0, 1)
+            Vib = 1 - math.clamp((Position.Y - SatVibMap.AbsolutePosition.Y) / SatVibMap.AbsoluteSize.Y, 0, 1)
+            Display()
+        end)
+        BindDrag(HueSlider, function(Position)
+            Hue = math.clamp((Position.Y - HueSlider.AbsolutePosition.Y) / HueSlider.AbsoluteSize.Y, 0, 1)
+            Display()
+        end)
+        if UseAlpha then
+            BindDrag(TransparencySlider, function(Position)
+                Transparency = 1 - math.clamp((Position.Y - TransparencySlider.AbsolutePosition.Y) / TransparencySlider.AbsoluteSize.Y, 0, 1)
+                Display()
+            end)
+        end
 
 		Display()
 
 		Dialog:Button("Done", function()
-			Colorpicker:SetValue({ Hue, Sat, Vib }, Transparency)
+			Colorpicker:SetValue({ Hue, Sat, Vib }, Transparency, OutlineTransparency)
 		end)
 		Dialog:Button("Cancel")
 		Dialog:Open()
@@ -3005,22 +3037,24 @@ function Element:New(Idx, Config)
 		Colorpicker.Value = Color3.fromHSV(Colorpicker.Hue, Colorpicker.Sat, Colorpicker.Vib)
 
 		DisplayFrameColor.BackgroundColor3 = Colorpicker.Value
-		DisplayFrameColor.BackgroundTransparency = Colorpicker.Transparency
+		DisplayFrameColor.BackgroundTransparency = Inline and 0 or Colorpicker.Transparency
 
-		Element.Library:SafeCallback(Colorpicker.Callback, Colorpicker.Value)
-		Element.Library:SafeCallback(Colorpicker.Changed, Colorpicker.Value)
+		Library:SafeCallback(Colorpicker.Callback, Colorpicker.Value, Colorpicker.Transparency, Colorpicker.OutlineTransparency)
+		Library:SafeCallback(Colorpicker.Changed, Colorpicker.Value, Colorpicker.Transparency, Colorpicker.OutlineTransparency)
 	end
 
-	function Colorpicker:SetValue(HSV, Transparency)
+	function Colorpicker:SetValue(HSV, Transparency, OutlineTransparency)
 		local Color = Color3.fromHSV(HSV[1], HSV[2], HSV[3])
 
 		Colorpicker.Transparency = Transparency or 0
+        if OutlineTransparency ~= nil then Colorpicker.OutlineTransparency = math.clamp(OutlineTransparency, 0, 1) end
 		Colorpicker:SetHSVFromRGB(Color)
 		Colorpicker:Display()
 	end
 
-	function Colorpicker:SetValueRGB(Color, Transparency)
+	function Colorpicker:SetValueRGB(Color, Transparency, OutlineTransparency)
 		Colorpicker.Transparency = Transparency or 0
+        if OutlineTransparency ~= nil then Colorpicker.OutlineTransparency = math.clamp(OutlineTransparency, 0, 1) end
 		Colorpicker:SetHSVFromRGB(Color)
 		Colorpicker:Display()
 	end
@@ -3031,13 +3065,27 @@ function Element:New(Idx, Config)
 	end
 
 	function Colorpicker:Destroy()
-		ColorpickerFrame:Destroy()
+        if Inline then
+            DisplayFrame:Destroy()
+            ColorpickerFrame.InlineControlInset = 142
+            ColorpickerFrame.LabelHolder.Size = UDim2.new(1, -142, 0, 0)
+        else
+            ColorpickerFrame:Destroy()
+        end
 		Library.Options[Idx] = nil
 	end
 
-	Creator.AddSignal(ColorpickerFrame.Frame.MouseButton1Click, function()
+	Creator.AddSignal(Inline and DisplayFrame.MouseButton1Click or ColorpickerFrame.Frame.MouseButton1Click, function()
+		if Library.DialogOpen then return end
 		CreateColorDialog()
 	end)
+    if Inline then
+        local function MarkInput()
+            ColorpickerFrame.KeybindInputAt = os.clock()
+        end
+        Creator.AddSignal(DisplayFrame.InputBegan, MarkInput)
+        Creator.AddSignal(DisplayFrame.InputEnded, MarkInput)
+    end
 
 	Colorpicker:Display()
 
@@ -3816,17 +3864,19 @@ function Element:New(Idx, Config)
         if not CaptureHint or Destroyed then return end
         CaptureHint.Visible = Text ~= nil
         if Text then
-            local Available = math.max(0, KeybindFrame.Frame.AbsoluteSize.X - 152)
+            local Inset = KeybindFrame.InlineControlInset or 142
+            local Available = math.max(0, KeybindFrame.Frame.AbsoluteSize.X - Inset - 10)
             local Width = math.min(250, Available * 0.6)
             CaptureHint.Size = UDim2.fromOffset(Width, 32)
+            CaptureHint.Position = UDim2.new(1, -Inset + 12, 0.5, 0)
             CaptureHint.Text = Text
             -- Reserve a separate region for the hint, immediately before the bell.
-            KeybindFrame.LabelHolder.Size = UDim2.new(1, -142 - Width - 8, 0, 0)
+            KeybindFrame.LabelHolder.Size = UDim2.new(1, -Inset - Width - 8, 0, 0)
             KeybindFrame.TitleLabel.TextWrapped = false
             KeybindFrame.TitleLabel.AutomaticSize = Enum.AutomaticSize.None
             KeybindFrame.TitleLabel.TextTruncate = Enum.TextTruncate.AtEnd
         else
-            KeybindFrame.LabelHolder.Size = UDim2.new(1, -142, 0, 0)
+            KeybindFrame.LabelHolder.Size = UDim2.new(1, -(KeybindFrame.InlineControlInset or 142), 0, 0)
             KeybindFrame.TitleLabel.TextWrapped = OriginalTitleWrap
             KeybindFrame.TitleLabel.AutomaticSize = OriginalTitleAutoSize
             KeybindFrame.TitleLabel.TextTruncate = OriginalTitleTruncate
@@ -4008,7 +4058,7 @@ function Element:New(Idx, Config)
     end)
 
 	Creator.AddSignal(UserInputService.InputBegan, function(Input)
-		if not Destroyed and not Library.PickingKeybind and not UserInputService:GetFocusedTextBox() then
+		if not Destroyed and not Library.DialogOpen and not Library.PickingKeybind and not UserInputService:GetFocusedTextBox() then
 			if Keybind.Mode == "Toggle" then
 				local Key = Keybind.Value
 
@@ -4270,6 +4320,13 @@ function Element:New(Idx, Config)
         self.Keybind = require(Root.Elements.Keybind).New({ Library = Library }, KeybindIdx, ConfigCopy)
         return self.Keybind
     end
+    function Toggle:AddColorpicker(ColorIdx, ColorConfig)
+        if self.Colorpicker then self.Colorpicker:Destroy() end
+        local ConfigCopy = table.clone(ColorConfig)
+        ConfigCopy.InlineFrame = ToggleFrame
+        self.Colorpicker = require(Root.Elements.Colorpicker).New({ Library = Library }, ColorIdx, ConfigCopy)
+        return self.Colorpicker
+    end
 
 	local ToggleCircle = New("ImageLabel", {
 		AnchorPoint = Vector2.new(0, 0.5),
@@ -4343,13 +4400,14 @@ function Element:New(Idx, Config)
 	end
 
 	function Toggle:Destroy()
+		if self.Colorpicker then self.Colorpicker:Destroy() end
 		if self.Keybind then self.Keybind:Destroy() end
 		ToggleFrame:Destroy()
 		Library.Options[Idx] = nil
 	end
 
 	Creator.AddSignal(ToggleFrame.Frame.MouseButton1Click, function()
-        if Library.PickingKeybind or (ToggleFrame.KeybindInputAt and os.clock() - ToggleFrame.KeybindInputAt < 0.3) then return end
+        if Library.DialogOpen or Library.PickingKeybind or (ToggleFrame.KeybindInputAt and os.clock() - ToggleFrame.KeybindInputAt < 0.3) then return end
 		Toggle:SetValue(not Toggle.Value)
 	end)
 
@@ -5188,7 +5246,81 @@ return {
 }
 
 end
-loaders[nodes[30]] = function(script, require)
+loaders[nodes[29]] = function(script, require)
+-- Preserve the game's camera; release only the pointer while the desktop menu is visible.
+return function(Library, Window)
+    local Input = game:GetService("UserInputService")
+    local Run = game:GetService("RunService")
+    local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
+    local Environment = getgenv and getgenv() or _G
+    local Name = "Fax_MenuMouse"
+    if Environment[Name] then Environment[Name]() end
+    if Library.Device ~= "Computer" then return end
+
+    local Previous, Focused, Destroyed = nil, true, false
+    local Connections = {}
+    local function Restore()
+        Run:UnbindFromRenderStep(Name .. "_Before")
+        Run:UnbindFromRenderStep(Name)
+        if not Previous then return end
+        Input.MouseBehavior = Previous.Behavior
+        Input.MouseIconEnabled = Previous.Visible
+        Input.MouseDeltaSensitivity = Previous.Sensitivity
+        Mouse.Icon = Previous.Icon
+        Previous = nil
+    end
+    local function Update()
+        if not Previous then return end
+        local Rotating = Focused and not Input:GetFocusedTextBox()
+            and Input:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
+        Input.MouseDeltaSensitivity = Rotating and Previous.Sensitivity or 0
+        Input.MouseBehavior = Rotating and Enum.MouseBehavior.LockCurrentPosition or Enum.MouseBehavior.Default
+        Input.MouseIconEnabled = not Rotating
+        Mouse.Icon = ""
+    end
+    local function Sync()
+        if Destroyed or Library.Unloaded or not Focused or not Window.Root.Visible or not Library.GUI.Enabled then
+            Restore()
+            return
+        end
+        if not Previous then
+            Previous = {
+                Behavior = Input.MouseBehavior, Visible = Input.MouseIconEnabled,
+                Sensitivity = Input.MouseDeltaSensitivity, Icon = Mouse.Icon,
+            }
+            Run:BindToRenderStep(Name .. "_Before", Enum.RenderPriority.Input.Value - 1, Update)
+            Run:BindToRenderStep(Name, Enum.RenderPriority.Last.Value + 1, Update)
+        end
+        Update()
+    end
+    local function Connect(Signal, Callback)
+        table.insert(Connections, Signal:Connect(Callback))
+    end
+    local function Cleanup()
+        if Destroyed then return end
+        Destroyed = true
+        Restore()
+        for _, Connection in ipairs(Connections) do Connection:Disconnect() end
+        Environment[Name] = nil
+    end
+    Environment[Name] = Cleanup
+    Connect(Window.Root:GetPropertyChangedSignal("Visible"), Sync)
+    Connect(Library.GUI:GetPropertyChangedSignal("Enabled"), Sync)
+    Connect(Library.GUI.Destroying, Cleanup)
+    Connect(Window.Root.Destroying, Cleanup)
+    Connect(Input.WindowFocusReleased, function() Focused = false; Sync() end)
+    Connect(Input.WindowFocused, function() Focused = true; Sync() end)
+    Connect(Input.InputBegan, function(Event)
+        if Event.UserInputType == Enum.UserInputType.MouseButton2 then Update() end
+    end)
+    Connect(Input.InputEnded, function(Event)
+        if Event.UserInputType == Enum.UserInputType.MouseButton2 then Update() end
+    end)
+    Sync()
+end
+
+end
+loaders[nodes[31]] = function(script, require)
 local Flipper = {
 	SingleMotor = require(script.SingleMotor),
 	GroupMotor = require(script.GroupMotor),
@@ -5203,7 +5335,7 @@ local Flipper = {
 return Flipper
 
 end
-loaders[nodes[31]] = function(script, require)
+loaders[nodes[32]] = function(script, require)
 local RunService = game:GetService("RunService")
 
 local Signal = require(script.Parent.Signal)
@@ -5261,7 +5393,7 @@ end
 return BaseMotor
 
 end
-loaders[nodes[32]] = function(script, require)
+loaders[nodes[33]] = function(script, require)
 local BaseMotor = require(script.Parent.BaseMotor)
 local SingleMotor = require(script.Parent.SingleMotor)
 
@@ -5374,7 +5506,7 @@ end
 return GroupMotor
 
 end
-loaders[nodes[33]] = function(script, require)
+loaders[nodes[34]] = function(script, require)
 local Instant = {}
 Instant.__index = Instant
 
@@ -5394,7 +5526,7 @@ end
 return Instant
 
 end
-loaders[nodes[34]] = function(script, require)
+loaders[nodes[35]] = function(script, require)
 local function isMotor(value)
 	local motorType = tostring(value):match("^Motor%((.+)%)$")
 
@@ -5408,7 +5540,7 @@ end
 return isMotor
 
 end
-loaders[nodes[35]] = function(script, require)
+loaders[nodes[36]] = function(script, require)
 local Linear = {}
 Linear.__index = Linear
 
@@ -5447,7 +5579,7 @@ end
 return Linear
 
 end
-loaders[nodes[36]] = function(script, require)
+loaders[nodes[37]] = function(script, require)
 local Connection = {}
 Connection.__index = Connection
 
@@ -5508,7 +5640,7 @@ end
 return Signal
 
 end
-loaders[nodes[37]] = function(script, require)
+loaders[nodes[38]] = function(script, require)
 local BaseMotor = require(script.Parent.BaseMotor)
 
 local SingleMotor = setmetatable({}, BaseMotor)
@@ -5578,7 +5710,7 @@ end
 return SingleMotor
 
 end
-loaders[nodes[38]] = function(script, require)
+loaders[nodes[39]] = function(script, require)
 local VELOCITY_THRESHOLD = 0.001
 local POSITION_THRESHOLD = 0.001
 
@@ -5688,7 +5820,7 @@ end
 return Spring
 
 end
-loaders[nodes[39]] = function(script, require)
+loaders[nodes[40]] = function(script, require)
 return {
     Names = { "Fax", "Dark", "Darker", "Light", "Aqua", "Amethyst", "Rose" },
     Fax = require(script.Fax),
@@ -5701,7 +5833,7 @@ return {
 }
 
 end
-loaders[nodes[40]] = function(script, require)
+loaders[nodes[41]] = function(script, require)
 return {
 	Name = "Amethyst",
 	Accent = Color3.fromRGB(97, 62, 167),
@@ -5751,7 +5883,7 @@ return {
 }
 
 end
-loaders[nodes[41]] = function(script, require)
+loaders[nodes[42]] = function(script, require)
 return {
 	Name = "Aqua",
 	Accent = Color3.fromRGB(60, 165, 165),
@@ -5801,7 +5933,7 @@ return {
 }
 
 end
-loaders[nodes[42]] = function(script, require)
+loaders[nodes[43]] = function(script, require)
 return {
 	Name = "Dark",
 	Accent = Color3.fromRGB(96, 205, 255),
@@ -5851,7 +5983,7 @@ return {
 }
 
 end
-loaders[nodes[43]] = function(script, require)
+loaders[nodes[44]] = function(script, require)
 return {
 	Name = "Darker",
 	Accent = Color3.fromRGB(72, 138, 182),
@@ -5884,7 +6016,7 @@ return {
 }
 
 end
-loaders[nodes[44]] = function(script, require)
+loaders[nodes[45]] = function(script, require)
 return {
     Name = "Fax",
     Accent = Color3.fromRGB(155, 112, 224),
@@ -5928,7 +6060,7 @@ return {
 }
 
 end
-loaders[nodes[45]] = function(script, require)
+loaders[nodes[46]] = function(script, require)
 return {
 	Name = "Light",
 	Accent = Color3.fromRGB(0, 103, 192),
@@ -5978,7 +6110,7 @@ return {
 }
 
 end
-loaders[nodes[46]] = function(script, require)
+loaders[nodes[47]] = function(script, require)
 return {
 	Name = "Rose",
 	Accent = Color3.fromRGB(180, 55, 90),
