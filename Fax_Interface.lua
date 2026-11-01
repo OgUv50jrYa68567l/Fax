@@ -1149,9 +1149,10 @@ function Notification:New(Config)
 	}
 
 	NewNotification.AcrylicPaint = Acrylic.AcrylicPaint()
+    local Icon = Config.Icon and require(Root):GetIcon(Config.Icon)
 
 	NewNotification.Title = New("TextLabel", {
-		Position = UDim2.new(0, 14, 0, 17),
+		Position = UDim2.new(0, Icon and 44 or 14, 0, 17),
 		Text = Config.Title,
 		RichText = true,
 		TextColor3 = Color3.fromRGB(255, 255, 255),
@@ -1160,7 +1161,7 @@ function Notification:New(Config)
 		TextSize = 18,
 		TextXAlignment = "Left",
 		TextYAlignment = "Center",
-		Size = UDim2.new(1, -76, 0, 24),
+		Size = UDim2.new(1, Icon and -106 or -76, 0, 24),
 		TextWrapped = true,
 		BackgroundTransparency = 1,
 		ThemeTag = {
@@ -1249,6 +1250,17 @@ function Notification:New(Config)
 	if Config.Content == "" then
 		NewNotification.ContentLabel.Visible = false
 	end
+    if Icon then
+        NewNotification.Icon = New("ImageLabel", {
+            Parent = NewNotification.Root,
+            Position = UDim2.fromOffset(14, 29),
+            AnchorPoint = Vector2.new(0, 0.5),
+            Size = UDim2.fromOffset(20, 20),
+            BackgroundTransparency = 1,
+            Image = Icon,
+            ThemeTag = { ImageColor3 = "Accent" },
+        })
+    end
 
 	if Config.SubContent == "" then
 		NewNotification.SubContentLabel.Visible = false
@@ -1394,9 +1406,10 @@ end
 
 function TabModule:GetCurrentTabPos()
 	local TabHolderPos = TabModule.Window.TabHolder.AbsolutePosition.Y
-	local TabPos = TabModule.Tabs[TabModule.SelectedTab].Frame.AbsolutePosition.Y
-
-	return TabPos - TabHolderPos
+    local Selected = TabModule.Tabs[TabModule.SelectedTab]
+    if not Selected then return 24 end
+    local Frame = Selected.Frame
+    return Frame.AbsolutePosition.Y - TabHolderPos + Frame.AbsoluteSize.Y / 2
 end
 
 function TabModule:New(Title, Icon, Parent)
@@ -1515,6 +1528,11 @@ function TabModule:New(Title, Icon, Parent)
 	Creator.AddSignal(Tab.Frame.MouseButton1Click, function()
 		TabModule:SelectTab(TabIndex)
 	end)
+    Creator.AddSignal(Tab.Frame:GetPropertyChangedSignal("AbsoluteSize"), function()
+        if Tab.Selected then
+            Window.SelectorPosMotor:setGoal(Instant(TabModule:GetCurrentTabPos()))
+        end
+    end)
 
 	TabModule.Containers[TabIndex] = Tab.ContainerFrame
 	TabModule.Tabs[TabIndex] = Tab
@@ -1896,9 +1914,9 @@ return function(Config)
 	Window.TabWidth = Config.TabWidth
 
 	local Selector = New("Frame", {
-		Size = UDim2.fromOffset(4, 0),
+		Size = UDim2.fromOffset(4, 16),
 		BackgroundColor3 = Color3.fromRGB(76, 194, 255),
-		Position = UDim2.fromOffset(0, 17),
+		Position = UDim2.fromOffset(0, 24),
 		AnchorPoint = Vector2.new(0, 0.5),
 		ThemeTag = {
 			BackgroundColor3 = "Accent",
@@ -2008,8 +2026,8 @@ return function(Config)
 		Y = Window.Position.Y.Offset,
 	})
 
-	Window.SelectorPosMotor = Flipper.SingleMotor.new(17)
-	Window.SelectorSizeMotor = Flipper.SingleMotor.new(0)
+	Window.SelectorPosMotor = Flipper.SingleMotor.new(24)
+	Window.SelectorSizeMotor = Flipper.SingleMotor.new(16)
 	Window.ContainerBackMotor = Flipper.SingleMotor.new(0)
 	Window.ContainerPosMotor = Flipper.SingleMotor.new(94)
 
@@ -2024,12 +2042,12 @@ return function(Config)
 	local LastValue = 0
 	local LastTime = 0
 	Window.SelectorPosMotor:onStep(function(Value)
-		Selector.Position = UDim2.new(0, 0, 0, Value + 17)
+		Selector.Position = UDim2.new(0, 0, 0, Value)
 		local Now = tick()
-		local DeltaTime = Now - LastTime
+		local DeltaTime = math.max(Now - LastTime, 1 / 240)
 
 		if LastValue ~= nil then
-			Window.SelectorSizeMotor:setGoal(Spring((math.abs(Value - LastValue) / (DeltaTime * 60)) + 16))
+			Window.SelectorSizeMotor:setGoal(Spring(math.min(32, (math.abs(Value - LastValue) / (DeltaTime * 60)) + 16)))
 			LastValue = Value
 		end
 		LastTime = Now
@@ -2247,7 +2265,7 @@ return function(Config)
 	end
 
 	Creator.AddSignal(Window.TabHolder:GetPropertyChangedSignal("CanvasPosition"), function()
-		LastValue = TabModule:GetCurrentTabPos() + 16
+		LastValue = TabModule:GetCurrentTabPos()
 		LastTime = 0
 		Window.SelectorPosMotor:setGoal(Instant(TabModule:GetCurrentTabPos()))
 	end)
@@ -3777,6 +3795,7 @@ function Element:New(Idx, Config)
             Position = UDim2.new(1, -130, 0.5, 0),
             AnchorPoint = Vector2.new(1, 0.5),
             TextWrapped = true,
+            TextXAlignment = Enum.TextXAlignment.Right,
             TextSize = 12,
             Font = Enum.Font.Gotham,
             ZIndex = 5,
@@ -3789,6 +3808,29 @@ function Element:New(Idx, Config)
         KeybindFrame.DescLabel.Size = UDim2.new(1, 0, 0, 14)
     else
         KeybindFrame:StackControl(KeybindDisplayFrame)
+    end
+    local OriginalTitleWrap = KeybindFrame.TitleLabel.TextWrapped
+    local OriginalTitleAutoSize = KeybindFrame.TitleLabel.AutomaticSize
+    local OriginalTitleTruncate = KeybindFrame.TitleLabel.TextTruncate
+    local function SetHint(Text)
+        if not CaptureHint or Destroyed then return end
+        CaptureHint.Visible = Text ~= nil
+        if Text then
+            local Available = math.max(0, KeybindFrame.Frame.AbsoluteSize.X - 152)
+            local Width = math.min(250, Available * 0.6)
+            CaptureHint.Size = UDim2.fromOffset(Width, 32)
+            CaptureHint.Text = Text
+            -- Reserve a separate region for the hint, immediately before the bell.
+            KeybindFrame.LabelHolder.Size = UDim2.new(1, -142 - Width - 8, 0, 0)
+            KeybindFrame.TitleLabel.TextWrapped = false
+            KeybindFrame.TitleLabel.AutomaticSize = Enum.AutomaticSize.None
+            KeybindFrame.TitleLabel.TextTruncate = Enum.TextTruncate.AtEnd
+        else
+            KeybindFrame.LabelHolder.Size = UDim2.new(1, -142, 0, 0)
+            KeybindFrame.TitleLabel.TextWrapped = OriginalTitleWrap
+            KeybindFrame.TitleLabel.AutomaticSize = OriginalTitleAutoSize
+            KeybindFrame.TitleLabel.TextTruncate = OriginalTitleTruncate
+        end
     end
     local function StyleButton(Button, Icon, Label, Enabled)
         Button.BackgroundTransparency = Enabled and 0.15 or 0.88
@@ -3873,6 +3915,7 @@ function Element:New(Idx, Config)
 	end
 
 	function Keybind:Destroy()
+        SetHint(nil)
         Destroyed = true
         if Library.PickingKeybind == Keybind then Library.PickingKeybind = nil end
         if Inline then
@@ -3911,7 +3954,7 @@ function Element:New(Idx, Config)
         ReleaseInput = nil
         if Library.PickingKeybind == self then Library.PickingKeybind = nil end
         if not Destroyed then RefreshBinding() end
-        if CaptureHint and not Destroyed then CaptureHint.Visible = false end
+        SetHint(nil)
     end
 
     local function BeginCapture()
@@ -3920,22 +3963,18 @@ function Element:New(Idx, Config)
         Picking = true
         Library.PickingKeybind = Keybind
         RefreshBinding()
-        if CaptureHint then
-            CaptureHint.Text = "Press a key | Esc: cancel | Backspace: clear"
-            CaptureHint.Visible = true
-        end
+        SetHint("Press a key | Esc: cancel | Backspace: clear")
     end
     Creator.AddSignal(KeybindDisplayFrame.MouseButton1Click, BeginCapture)
     Creator.AddSignal(KeybindDisplayFrame.Activated, BeginCapture)
     if CaptureHint then
         Creator.AddSignal(KeybindDisplayFrame.MouseEnter, function()
             if not Picking then
-                CaptureHint.Text = DisplayKey(Keybind.Value) .. " | Click to change"
-                CaptureHint.Visible = true
+                SetHint(DisplayKey(Keybind.Value) .. " | Click to change")
             end
         end)
         Creator.AddSignal(KeybindDisplayFrame.MouseLeave, function()
-            if not Picking then CaptureHint.Visible = false end
+            if not Picking then SetHint(nil) end
         end)
     end
 
@@ -4295,6 +4334,7 @@ function Element:New(Idx, Config)
 		Library:SafeCallback(Toggle.Changed, Toggle.Value)
         if PreviousValue ~= Toggle.Value and Toggle.Keybind and Toggle.Keybind.NotificationsEnabled then
             Library:Notify({
+                Icon = "bell-ring",
                 Title = ToggleFrame.TitleLabel.Text,
                 Content = Toggle.Value and "Enabled" or "Disabled",
                 Duration = 3,
