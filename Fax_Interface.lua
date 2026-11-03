@@ -30,47 +30,48 @@ nodes[3] = { Name = "AcrylicBlur", children = {} }
 nodes[4] = { Name = "AcrylicPaint", children = {} }
 nodes[5] = { Name = "CreateAcrylic", children = {} }
 nodes[6] = { Name = "Utils", children = {} }
-nodes[7] = { Name = "Components", children = {} }
-nodes[8] = { Name = "Assets", children = {} }
-nodes[9] = { Name = "Button", children = {} }
-nodes[10] = { Name = "Dialog", children = {} }
-nodes[11] = { Name = "Element", children = {} }
-nodes[12] = { Name = "Notification", children = {} }
-nodes[13] = { Name = "Section", children = {} }
-nodes[14] = { Name = "Tab", children = {} }
-nodes[15] = { Name = "Textbox", children = {} }
-nodes[16] = { Name = "TitleBar", children = {} }
-nodes[17] = { Name = "Window", children = {} }
-nodes[18] = { Name = "Creator", children = {} }
-nodes[19] = { Name = "Elements", children = {} }
-nodes[20] = { Name = "Button", children = {} }
-nodes[21] = { Name = "Colorpicker", children = {} }
-nodes[22] = { Name = "Dropdown", children = {} }
-nodes[23] = { Name = "Input", children = {} }
-nodes[24] = { Name = "Keybind", children = {} }
-nodes[25] = { Name = "Paragraph", children = {} }
-nodes[26] = { Name = "Slider", children = {} }
-nodes[27] = { Name = "Toggle", children = {} }
-nodes[28] = { Name = "Icons", children = {} }
-nodes[29] = { Name = "MouseController", children = {} }
-nodes[30] = { Name = "Packages", children = {} }
-nodes[31] = { Name = "Flipper", children = {} }
-nodes[32] = { Name = "BaseMotor", children = {} }
-nodes[33] = { Name = "GroupMotor", children = {} }
-nodes[34] = { Name = "Instant", children = {} }
-nodes[35] = { Name = "isMotor", children = {} }
-nodes[36] = { Name = "Linear", children = {} }
-nodes[37] = { Name = "Signal", children = {} }
-nodes[38] = { Name = "SingleMotor", children = {} }
-nodes[39] = { Name = "Spring", children = {} }
-nodes[40] = { Name = "Themes", children = {} }
-nodes[41] = { Name = "Amethyst", children = {} }
-nodes[42] = { Name = "Aqua", children = {} }
-nodes[43] = { Name = "Dark", children = {} }
-nodes[44] = { Name = "Darker", children = {} }
-nodes[45] = { Name = "Fax", children = {} }
-nodes[46] = { Name = "Light", children = {} }
-nodes[47] = { Name = "Rose", children = {} }
+nodes[7] = { Name = "Branding", children = {} }
+nodes[8] = { Name = "Components", children = {} }
+nodes[9] = { Name = "Assets", children = {} }
+nodes[10] = { Name = "Button", children = {} }
+nodes[11] = { Name = "Dialog", children = {} }
+nodes[12] = { Name = "Element", children = {} }
+nodes[13] = { Name = "Notification", children = {} }
+nodes[14] = { Name = "Section", children = {} }
+nodes[15] = { Name = "Tab", children = {} }
+nodes[16] = { Name = "Textbox", children = {} }
+nodes[17] = { Name = "TitleBar", children = {} }
+nodes[18] = { Name = "Window", children = {} }
+nodes[19] = { Name = "Creator", children = {} }
+nodes[20] = { Name = "Elements", children = {} }
+nodes[21] = { Name = "Button", children = {} }
+nodes[22] = { Name = "Colorpicker", children = {} }
+nodes[23] = { Name = "Dropdown", children = {} }
+nodes[24] = { Name = "Input", children = {} }
+nodes[25] = { Name = "Keybind", children = {} }
+nodes[26] = { Name = "Paragraph", children = {} }
+nodes[27] = { Name = "Slider", children = {} }
+nodes[28] = { Name = "Toggle", children = {} }
+nodes[29] = { Name = "Icons", children = {} }
+nodes[30] = { Name = "MouseController", children = {} }
+nodes[31] = { Name = "Packages", children = {} }
+nodes[32] = { Name = "Flipper", children = {} }
+nodes[33] = { Name = "BaseMotor", children = {} }
+nodes[34] = { Name = "GroupMotor", children = {} }
+nodes[35] = { Name = "Instant", children = {} }
+nodes[36] = { Name = "isMotor", children = {} }
+nodes[37] = { Name = "Linear", children = {} }
+nodes[38] = { Name = "Signal", children = {} }
+nodes[39] = { Name = "SingleMotor", children = {} }
+nodes[40] = { Name = "Spring", children = {} }
+nodes[41] = { Name = "Themes", children = {} }
+nodes[42] = { Name = "Amethyst", children = {} }
+nodes[43] = { Name = "Aqua", children = {} }
+nodes[44] = { Name = "Dark", children = {} }
+nodes[45] = { Name = "Darker", children = {} }
+nodes[46] = { Name = "Fax", children = {} }
+nodes[47] = { Name = "Light", children = {} }
+nodes[48] = { Name = "Rose", children = {} }
 for _, node in ipairs(nodes) do
  function node:GetChildren() return self.children end
 end
@@ -90,128 +91,131 @@ nodes[6].Parent = nodes[2]
 nodes[2]["Utils"] = nodes[6]
 table.insert(nodes[2].children, nodes[6])
 nodes[7].Parent = nodes[1]
-nodes[1]["Components"] = nodes[7]
+nodes[1]["Branding"] = nodes[7]
 table.insert(nodes[1].children, nodes[7])
-nodes[8].Parent = nodes[7]
-nodes[7]["Assets"] = nodes[8]
-table.insert(nodes[7].children, nodes[8])
-nodes[9].Parent = nodes[7]
-nodes[7]["Button"] = nodes[9]
-table.insert(nodes[7].children, nodes[9])
-nodes[10].Parent = nodes[7]
-nodes[7]["Dialog"] = nodes[10]
-table.insert(nodes[7].children, nodes[10])
-nodes[11].Parent = nodes[7]
-nodes[7]["Element"] = nodes[11]
-table.insert(nodes[7].children, nodes[11])
-nodes[12].Parent = nodes[7]
-nodes[7]["Notification"] = nodes[12]
-table.insert(nodes[7].children, nodes[12])
-nodes[13].Parent = nodes[7]
-nodes[7]["Section"] = nodes[13]
-table.insert(nodes[7].children, nodes[13])
-nodes[14].Parent = nodes[7]
-nodes[7]["Tab"] = nodes[14]
-table.insert(nodes[7].children, nodes[14])
-nodes[15].Parent = nodes[7]
-nodes[7]["Textbox"] = nodes[15]
-table.insert(nodes[7].children, nodes[15])
-nodes[16].Parent = nodes[7]
-nodes[7]["TitleBar"] = nodes[16]
-table.insert(nodes[7].children, nodes[16])
-nodes[17].Parent = nodes[7]
-nodes[7]["Window"] = nodes[17]
-table.insert(nodes[7].children, nodes[17])
-nodes[18].Parent = nodes[1]
-nodes[1]["Creator"] = nodes[18]
-table.insert(nodes[1].children, nodes[18])
+nodes[8].Parent = nodes[1]
+nodes[1]["Components"] = nodes[8]
+table.insert(nodes[1].children, nodes[8])
+nodes[9].Parent = nodes[8]
+nodes[8]["Assets"] = nodes[9]
+table.insert(nodes[8].children, nodes[9])
+nodes[10].Parent = nodes[8]
+nodes[8]["Button"] = nodes[10]
+table.insert(nodes[8].children, nodes[10])
+nodes[11].Parent = nodes[8]
+nodes[8]["Dialog"] = nodes[11]
+table.insert(nodes[8].children, nodes[11])
+nodes[12].Parent = nodes[8]
+nodes[8]["Element"] = nodes[12]
+table.insert(nodes[8].children, nodes[12])
+nodes[13].Parent = nodes[8]
+nodes[8]["Notification"] = nodes[13]
+table.insert(nodes[8].children, nodes[13])
+nodes[14].Parent = nodes[8]
+nodes[8]["Section"] = nodes[14]
+table.insert(nodes[8].children, nodes[14])
+nodes[15].Parent = nodes[8]
+nodes[8]["Tab"] = nodes[15]
+table.insert(nodes[8].children, nodes[15])
+nodes[16].Parent = nodes[8]
+nodes[8]["Textbox"] = nodes[16]
+table.insert(nodes[8].children, nodes[16])
+nodes[17].Parent = nodes[8]
+nodes[8]["TitleBar"] = nodes[17]
+table.insert(nodes[8].children, nodes[17])
+nodes[18].Parent = nodes[8]
+nodes[8]["Window"] = nodes[18]
+table.insert(nodes[8].children, nodes[18])
 nodes[19].Parent = nodes[1]
-nodes[1]["Elements"] = nodes[19]
+nodes[1]["Creator"] = nodes[19]
 table.insert(nodes[1].children, nodes[19])
-nodes[20].Parent = nodes[19]
-nodes[19]["Button"] = nodes[20]
-table.insert(nodes[19].children, nodes[20])
-nodes[21].Parent = nodes[19]
-nodes[19]["Colorpicker"] = nodes[21]
-table.insert(nodes[19].children, nodes[21])
-nodes[22].Parent = nodes[19]
-nodes[19]["Dropdown"] = nodes[22]
-table.insert(nodes[19].children, nodes[22])
-nodes[23].Parent = nodes[19]
-nodes[19]["Input"] = nodes[23]
-table.insert(nodes[19].children, nodes[23])
-nodes[24].Parent = nodes[19]
-nodes[19]["Keybind"] = nodes[24]
-table.insert(nodes[19].children, nodes[24])
-nodes[25].Parent = nodes[19]
-nodes[19]["Paragraph"] = nodes[25]
-table.insert(nodes[19].children, nodes[25])
-nodes[26].Parent = nodes[19]
-nodes[19]["Slider"] = nodes[26]
-table.insert(nodes[19].children, nodes[26])
-nodes[27].Parent = nodes[19]
-nodes[19]["Toggle"] = nodes[27]
-table.insert(nodes[19].children, nodes[27])
-nodes[28].Parent = nodes[1]
-nodes[1]["Icons"] = nodes[28]
-table.insert(nodes[1].children, nodes[28])
+nodes[20].Parent = nodes[1]
+nodes[1]["Elements"] = nodes[20]
+table.insert(nodes[1].children, nodes[20])
+nodes[21].Parent = nodes[20]
+nodes[20]["Button"] = nodes[21]
+table.insert(nodes[20].children, nodes[21])
+nodes[22].Parent = nodes[20]
+nodes[20]["Colorpicker"] = nodes[22]
+table.insert(nodes[20].children, nodes[22])
+nodes[23].Parent = nodes[20]
+nodes[20]["Dropdown"] = nodes[23]
+table.insert(nodes[20].children, nodes[23])
+nodes[24].Parent = nodes[20]
+nodes[20]["Input"] = nodes[24]
+table.insert(nodes[20].children, nodes[24])
+nodes[25].Parent = nodes[20]
+nodes[20]["Keybind"] = nodes[25]
+table.insert(nodes[20].children, nodes[25])
+nodes[26].Parent = nodes[20]
+nodes[20]["Paragraph"] = nodes[26]
+table.insert(nodes[20].children, nodes[26])
+nodes[27].Parent = nodes[20]
+nodes[20]["Slider"] = nodes[27]
+table.insert(nodes[20].children, nodes[27])
+nodes[28].Parent = nodes[20]
+nodes[20]["Toggle"] = nodes[28]
+table.insert(nodes[20].children, nodes[28])
 nodes[29].Parent = nodes[1]
-nodes[1]["MouseController"] = nodes[29]
+nodes[1]["Icons"] = nodes[29]
 table.insert(nodes[1].children, nodes[29])
 nodes[30].Parent = nodes[1]
-nodes[1]["Packages"] = nodes[30]
+nodes[1]["MouseController"] = nodes[30]
 table.insert(nodes[1].children, nodes[30])
-nodes[31].Parent = nodes[30]
-nodes[30]["Flipper"] = nodes[31]
-table.insert(nodes[30].children, nodes[31])
+nodes[31].Parent = nodes[1]
+nodes[1]["Packages"] = nodes[31]
+table.insert(nodes[1].children, nodes[31])
 nodes[32].Parent = nodes[31]
-nodes[31]["BaseMotor"] = nodes[32]
+nodes[31]["Flipper"] = nodes[32]
 table.insert(nodes[31].children, nodes[32])
-nodes[33].Parent = nodes[31]
-nodes[31]["GroupMotor"] = nodes[33]
-table.insert(nodes[31].children, nodes[33])
-nodes[34].Parent = nodes[31]
-nodes[31]["Instant"] = nodes[34]
-table.insert(nodes[31].children, nodes[34])
-nodes[35].Parent = nodes[31]
-nodes[31]["isMotor"] = nodes[35]
-table.insert(nodes[31].children, nodes[35])
-nodes[36].Parent = nodes[31]
-nodes[31]["Linear"] = nodes[36]
-table.insert(nodes[31].children, nodes[36])
-nodes[37].Parent = nodes[31]
-nodes[31]["Signal"] = nodes[37]
-table.insert(nodes[31].children, nodes[37])
-nodes[38].Parent = nodes[31]
-nodes[31]["SingleMotor"] = nodes[38]
-table.insert(nodes[31].children, nodes[38])
-nodes[39].Parent = nodes[31]
-nodes[31]["Spring"] = nodes[39]
-table.insert(nodes[31].children, nodes[39])
-nodes[40].Parent = nodes[1]
-nodes[1]["Themes"] = nodes[40]
-table.insert(nodes[1].children, nodes[40])
-nodes[41].Parent = nodes[40]
-nodes[40]["Amethyst"] = nodes[41]
-table.insert(nodes[40].children, nodes[41])
-nodes[42].Parent = nodes[40]
-nodes[40]["Aqua"] = nodes[42]
-table.insert(nodes[40].children, nodes[42])
-nodes[43].Parent = nodes[40]
-nodes[40]["Dark"] = nodes[43]
-table.insert(nodes[40].children, nodes[43])
-nodes[44].Parent = nodes[40]
-nodes[40]["Darker"] = nodes[44]
-table.insert(nodes[40].children, nodes[44])
-nodes[45].Parent = nodes[40]
-nodes[40]["Fax"] = nodes[45]
-table.insert(nodes[40].children, nodes[45])
-nodes[46].Parent = nodes[40]
-nodes[40]["Light"] = nodes[46]
-table.insert(nodes[40].children, nodes[46])
-nodes[47].Parent = nodes[40]
-nodes[40]["Rose"] = nodes[47]
-table.insert(nodes[40].children, nodes[47])
+nodes[33].Parent = nodes[32]
+nodes[32]["BaseMotor"] = nodes[33]
+table.insert(nodes[32].children, nodes[33])
+nodes[34].Parent = nodes[32]
+nodes[32]["GroupMotor"] = nodes[34]
+table.insert(nodes[32].children, nodes[34])
+nodes[35].Parent = nodes[32]
+nodes[32]["Instant"] = nodes[35]
+table.insert(nodes[32].children, nodes[35])
+nodes[36].Parent = nodes[32]
+nodes[32]["isMotor"] = nodes[36]
+table.insert(nodes[32].children, nodes[36])
+nodes[37].Parent = nodes[32]
+nodes[32]["Linear"] = nodes[37]
+table.insert(nodes[32].children, nodes[37])
+nodes[38].Parent = nodes[32]
+nodes[32]["Signal"] = nodes[38]
+table.insert(nodes[32].children, nodes[38])
+nodes[39].Parent = nodes[32]
+nodes[32]["SingleMotor"] = nodes[39]
+table.insert(nodes[32].children, nodes[39])
+nodes[40].Parent = nodes[32]
+nodes[32]["Spring"] = nodes[40]
+table.insert(nodes[32].children, nodes[40])
+nodes[41].Parent = nodes[1]
+nodes[1]["Themes"] = nodes[41]
+table.insert(nodes[1].children, nodes[41])
+nodes[42].Parent = nodes[41]
+nodes[41]["Amethyst"] = nodes[42]
+table.insert(nodes[41].children, nodes[42])
+nodes[43].Parent = nodes[41]
+nodes[41]["Aqua"] = nodes[43]
+table.insert(nodes[41].children, nodes[43])
+nodes[44].Parent = nodes[41]
+nodes[41]["Dark"] = nodes[44]
+table.insert(nodes[41].children, nodes[44])
+nodes[45].Parent = nodes[41]
+nodes[41]["Darker"] = nodes[45]
+table.insert(nodes[41].children, nodes[45])
+nodes[46].Parent = nodes[41]
+nodes[41]["Fax"] = nodes[46]
+table.insert(nodes[41].children, nodes[46])
+nodes[47].Parent = nodes[41]
+nodes[41]["Light"] = nodes[47]
+table.insert(nodes[41].children, nodes[47])
+nodes[48].Parent = nodes[41]
+nodes[41]["Rose"] = nodes[48]
+table.insert(nodes[41].children, nodes[48])
 local nativeRequire = require
 local function bundledRequire(node)
     if not loaders[node] then return nativeRequire(node) end
@@ -602,7 +606,7 @@ end
 loaders[nodes[4]] = function(script, require)
 local Creator = require(script.Parent.Parent.Creator)
 local New = Creator.New
--- Interpolate in Lua to avoid dark UIGradient banding on low graphics settings.
+-- One native rounded surface keeps the gradient continuous through every corner.
 return function()
     local Paint = {}
     Paint.Frame = New("Frame", {
@@ -610,44 +614,19 @@ return function()
     }, {
         New("Frame", {
             Name = "Background", Size = UDim2.fromScale(1, 1),
-            BackgroundColor3 = Color3.fromRGB(15, 13, 19), BackgroundTransparency = 0, BorderSizePixel = 0,
+            BackgroundColor3 = Color3.fromRGB(255, 255, 255), BackgroundTransparency = 0, BorderSizePixel = 0,
         }, {
             New("UICorner", { CornerRadius = UDim.new(0, 10) }),
+            New("UIGradient", {
+                Rotation = 90,
+                Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Color3.fromRGB(29, 23, 38)),
+                    ColorSequenceKeypoint.new(1, Color3.fromRGB(15, 13, 19)),
+                }),
+            }),
             New("UIStroke", { Transparency = 0.4, Thickness = 1, ThemeTag = { Color = "AcrylicBorder" } }),
         }),
     })
-    local Background = Paint.Frame.Background
-    local Strips = {}
-    local Count = 128
-    local Top = Color3.fromRGB(29, 23, 38)
-    local Bottom = Color3.fromRGB(15, 13, 19)
-    for Index = 1, Count do
-        local T = (Index - 1) / (Count - 1)
-        local Smooth = T * T * (3 - 2 * T)
-        Strips[Index] = New("Frame", {
-            Name = "GradientStrip",
-            Parent = Background,
-            BorderSizePixel = 0,
-            BackgroundColor3 = Top:Lerp(Bottom, Smooth),
-        })
-    end
-    local function LayoutGradient()
-        local Height = Background.AbsoluteSize.Y
-        for Index, Strip in ipairs(Strips) do
-            local Y = math.floor((Index - 1) * Height / Count)
-            local EndY = math.floor(Index * Height / Count)
-            local Edge = math.min(Y, Height - EndY)
-            local Radius = 10
-            local Inset = Edge < Radius and Radius - math.sqrt(math.max(0, Radius * Radius - (Radius - Edge) ^ 2)) or 0
-            Strip.Position = UDim2.fromOffset(math.ceil(Inset), Y)
-            Strip.Size = UDim2.new(1, -2 * math.ceil(Inset), 0, EndY - Y)
-        end
-    end
-    Creator.AddSignal(Background:GetPropertyChangedSignal("AbsoluteSize"), LayoutGradient)
-    Creator.AddSignal(Background:GetPropertyChangedSignal("BackgroundTransparency"), function()
-        for _, Strip in ipairs(Strips) do Strip.BackgroundTransparency = Background.BackgroundTransparency end
-    end)
-    LayoutGradient()
     if require(script.Parent.Parent).UseAcrylic then
         local Blur = require(script.Parent.AcrylicBlur)()
         Blur.Frame.Parent = Paint.Frame
@@ -705,7 +684,68 @@ end
 return { viewportPointToWorld, getOffset }
 
 end
-loaders[nodes[8]] = function(script, require)
+loaders[nodes[7]] = function(script, require)
+local Creator = require(script.Parent.Creator)
+local New = Creator.New
+local Logo, Loading = nil, false
+local Pending = {}
+local AssetUrl = "https://raw.githubusercontent.com/OgUv50jrYa68567l/Fax/refs/heads/main/Fax_Logo.png"
+
+local function LoadLogo(Callback)
+    if Logo then Callback(Logo); return end
+    table.insert(Pending, Callback)
+    if Loading then return end
+    Loading = true
+    task.spawn(function()
+        local Success, Result = pcall(function()
+            local CustomAsset = getcustomasset or getsynasset
+            if type(CustomAsset) ~= "function" or type(writefile) ~= "function" or type(isfile) ~= "function" then return nil end
+            if type(isfolder) ~= "function" or type(makefolder) ~= "function" then return nil end
+            if not isfolder("FaxAssets") then makefolder("FaxAssets") end
+            local Path = "FaxAssets/brand-logo-v1.png"
+            if not isfile(Path) then
+                local Data = game:HttpGet(AssetUrl)
+                assert(Data:sub(1, 8) == "\137PNG\r\n\26\n", "Invalid Fax logo image")
+                writefile(Path, Data)
+            end
+            return CustomAsset(Path)
+        end)
+        if Success then Logo = Result end
+        Loading = false
+        local Callbacks = Pending
+        Pending = {}
+        for _, Callback in ipairs(Callbacks) do Callback(Logo) end
+    end)
+end
+
+return function(Parent)
+    local Holder = New("Frame", {
+        Name = "FaxLogo", Parent = Parent,
+        Size = UDim2.fromOffset(22, 24), Position = UDim2.new(0, 12, 0.5, 0),
+        AnchorPoint = Vector2.new(0, 0.5), BackgroundTransparency = 1,
+    })
+    local Fallback = New("TextLabel", {
+        Parent = Holder, Size = UDim2.fromScale(1, 1),
+        Text = "F", Font = Enum.Font.GothamBold, TextSize = 20,
+        BackgroundTransparency = 1, ThemeTag = { TextColor3 = "Accent" },
+    })
+    local Icon = New("ImageLabel", {
+        Parent = Holder, Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1,
+        ImageColor3 = Color3.fromRGB(255, 255, 255), ScaleType = Enum.ScaleType.Fit,
+        Visible = false,
+    })
+    LoadLogo(function(Asset)
+        if Asset and Icon.Parent then
+            Icon.Image = Asset
+            Icon.Visible = true
+            Fallback.Visible = false
+        end
+    end)
+    return Holder
+end
+
+end
+loaders[nodes[9]] = function(script, require)
 return {
 	Close = "rbxassetid://9886659671",
 	Min = "rbxassetid://9886659276",
@@ -714,7 +754,7 @@ return {
 }
 
 end
-loaders[nodes[9]] = function(script, require)
+loaders[nodes[10]] = function(script, require)
 local Root = script.Parent.Parent
 local Flipper = require(Root.Packages.Flipper)
 local Creator = require(Root.Creator)
@@ -793,7 +833,7 @@ return function(Theme, Parent, DialogCheck)
 end
 
 end
-loaders[nodes[10]] = function(script, require)
+loaders[nodes[11]] = function(script, require)
 local UserInputService = game:GetService("UserInputService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
 local Camera = game:GetService("Workspace").CurrentCamera
@@ -964,7 +1004,7 @@ end
 return Dialog
 
 end
-loaders[nodes[11]] = function(script, require)
+loaders[nodes[12]] = function(script, require)
 local Root = script.Parent.Parent
 local Flipper = require(Root.Packages.Flipper)
 local Creator = require(Root.Creator)
@@ -1125,7 +1165,7 @@ return function(Title, Desc, Parent, Hover)
 end
 
 end
-loaders[nodes[12]] = function(script, require)
+loaders[nodes[13]] = function(script, require)
 local Root = script.Parent.Parent
 local Flipper = require(Root.Packages.Flipper)
 local Creator = require(Root.Creator)
@@ -1345,7 +1385,7 @@ end
 return Notification
 
 end
-loaders[nodes[13]] = function(script, require)
+loaders[nodes[14]] = function(script, require)
 local Root = script.Parent.Parent
 local Creator = require(Root.Creator)
 
@@ -1397,7 +1437,7 @@ return function(Title, Parent)
 end
 
 end
-loaders[nodes[14]] = function(script, require)
+loaders[nodes[15]] = function(script, require)
 local Root = script.Parent.Parent
 local Flipper = require(Root.Packages.Flipper)
 local Creator = require(Root.Creator)
@@ -1606,7 +1646,7 @@ end
 return TabModule
 
 end
-loaders[nodes[15]] = function(script, require)
+loaders[nodes[16]] = function(script, require)
 local TextService = game:GetService("TextService")
 local Root = script.Parent.Parent
 local Flipper = require(Root.Packages.Flipper)
@@ -1729,7 +1769,7 @@ return function(Parent, Acrylic)
 end
 
 end
-loaders[nodes[16]] = function(script, require)
+loaders[nodes[17]] = function(script, require)
 local Root = script.Parent.Parent
 local Assets = require(script.Parent.Assets)
 local Creator = require(Root.Creator)
@@ -1804,8 +1844,9 @@ return function(Config)
 		Parent = Config.Parent,
 	}, {
 		New("Frame", {
-			Size = UDim2.new(1, -16, 1, 0),
-			Position = UDim2.new(0, 16, 0, 0),
+			Size = UDim2.new(1, -166, 1, 0),
+			Position = UDim2.new(0, 42, 0, 0),
+			ClipsDescendants = true,
 			BackgroundTransparency = 1,
 		}, {
 			New("UIListLayout", {
@@ -1861,6 +1902,7 @@ return function(Config)
 		}),
 	})
 
+    TitleBar.Logo = require(Root.Branding)(TitleBar.Frame)
 	TitleBar.CloseButton = BarButton(Assets.Close, UDim2.new(1, -4, 0, 4), TitleBar.Frame, function()
 		Library.Window:Dialog({
 			Title = "Close",
@@ -1889,7 +1931,7 @@ return function(Config)
 end
 
 end
-loaders[nodes[17]] = function(script, require)
+loaders[nodes[18]] = function(script, require)
 -- i will rewrite this someday
 local UserInputService = game:GetService("UserInputService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
@@ -2321,7 +2363,7 @@ return function(Config)
 end
 
 end
-loaders[nodes[18]] = function(script, require)
+loaders[nodes[19]] = function(script, require)
 local Root = script.Parent
 local Themes = require(Root.Themes)
 local Flipper = require(Root.Packages.Flipper)
@@ -2499,7 +2541,7 @@ end
 return Creator
 
 end
-loaders[nodes[19]] = function(script, require)
+loaders[nodes[20]] = function(script, require)
 local Elements = {}
 
 for _, Theme in next, script:GetChildren() do
@@ -2509,7 +2551,7 @@ end
 return Elements
 
 end
-loaders[nodes[20]] = function(script, require)
+loaders[nodes[21]] = function(script, require)
 local Root = script.Parent.Parent
 local Creator = require(Root.Creator)
 
@@ -2548,7 +2590,7 @@ end
 return Element
 
 end
-loaders[nodes[21]] = function(script, require)
+loaders[nodes[22]] = function(script, require)
 local UserInputService = game:GetService("UserInputService")
 
 local Root = script.Parent.Parent
@@ -3096,7 +3138,7 @@ end
 return Element
 
 end
-loaders[nodes[22]] = function(script, require)
+loaders[nodes[23]] = function(script, require)
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
@@ -3596,7 +3638,7 @@ end
 return Element
 
 end
-loaders[nodes[23]] = function(script, require)
+loaders[nodes[24]] = function(script, require)
 local Root = script.Parent.Parent
 local Creator = require(Root.Creator)
 
@@ -3684,7 +3726,7 @@ end
 return Element
 
 end
-loaders[nodes[24]] = function(script, require)
+loaders[nodes[25]] = function(script, require)
 local UserInputService = game:GetService("UserInputService")
 
 local Root = script.Parent.Parent
@@ -4089,7 +4131,7 @@ end
 return Element
 
 end
-loaders[nodes[25]] = function(script, require)
+loaders[nodes[26]] = function(script, require)
 local Root = script.Parent.Parent
 local Components = Root.Components
 local Flipper = require(Root.Packages.Flipper)
@@ -4113,7 +4155,7 @@ end
 return Paragraph
 
 end
-loaders[nodes[26]] = function(script, require)
+loaders[nodes[27]] = function(script, require)
 local UserInputService = game:GetService("UserInputService")
 local Root = script.Parent.Parent
 local Creator = require(Root.Creator)
@@ -4283,7 +4325,7 @@ end
 return Element
 
 end
-loaders[nodes[27]] = function(script, require)
+loaders[nodes[28]] = function(script, require)
 local TweenService = game:GetService("TweenService")
 local Root = script.Parent.Parent
 local Creator = require(Root.Creator)
@@ -4420,7 +4462,7 @@ end
 return Element
 
 end
-loaders[nodes[28]] = function(script, require)
+loaders[nodes[29]] = function(script, require)
 -- This file was @generated by Tarmac. It is not intended for manual editing.
 return {
 	assets = {
@@ -5246,7 +5288,7 @@ return {
 }
 
 end
-loaders[nodes[29]] = function(script, require)
+loaders[nodes[30]] = function(script, require)
 -- Preserve the game's camera; release only the pointer while the desktop menu is visible.
 return function(Library, Window)
     local Input = game:GetService("UserInputService")
@@ -5320,7 +5362,7 @@ return function(Library, Window)
 end
 
 end
-loaders[nodes[31]] = function(script, require)
+loaders[nodes[32]] = function(script, require)
 local Flipper = {
 	SingleMotor = require(script.SingleMotor),
 	GroupMotor = require(script.GroupMotor),
@@ -5335,7 +5377,7 @@ local Flipper = {
 return Flipper
 
 end
-loaders[nodes[32]] = function(script, require)
+loaders[nodes[33]] = function(script, require)
 local RunService = game:GetService("RunService")
 
 local Signal = require(script.Parent.Signal)
@@ -5393,7 +5435,7 @@ end
 return BaseMotor
 
 end
-loaders[nodes[33]] = function(script, require)
+loaders[nodes[34]] = function(script, require)
 local BaseMotor = require(script.Parent.BaseMotor)
 local SingleMotor = require(script.Parent.SingleMotor)
 
@@ -5506,7 +5548,7 @@ end
 return GroupMotor
 
 end
-loaders[nodes[34]] = function(script, require)
+loaders[nodes[35]] = function(script, require)
 local Instant = {}
 Instant.__index = Instant
 
@@ -5526,7 +5568,7 @@ end
 return Instant
 
 end
-loaders[nodes[35]] = function(script, require)
+loaders[nodes[36]] = function(script, require)
 local function isMotor(value)
 	local motorType = tostring(value):match("^Motor%((.+)%)$")
 
@@ -5540,7 +5582,7 @@ end
 return isMotor
 
 end
-loaders[nodes[36]] = function(script, require)
+loaders[nodes[37]] = function(script, require)
 local Linear = {}
 Linear.__index = Linear
 
@@ -5579,7 +5621,7 @@ end
 return Linear
 
 end
-loaders[nodes[37]] = function(script, require)
+loaders[nodes[38]] = function(script, require)
 local Connection = {}
 Connection.__index = Connection
 
@@ -5640,7 +5682,7 @@ end
 return Signal
 
 end
-loaders[nodes[38]] = function(script, require)
+loaders[nodes[39]] = function(script, require)
 local BaseMotor = require(script.Parent.BaseMotor)
 
 local SingleMotor = setmetatable({}, BaseMotor)
@@ -5710,7 +5752,7 @@ end
 return SingleMotor
 
 end
-loaders[nodes[39]] = function(script, require)
+loaders[nodes[40]] = function(script, require)
 local VELOCITY_THRESHOLD = 0.001
 local POSITION_THRESHOLD = 0.001
 
@@ -5820,7 +5862,7 @@ end
 return Spring
 
 end
-loaders[nodes[40]] = function(script, require)
+loaders[nodes[41]] = function(script, require)
 return {
     Names = { "Fax", "Dark", "Darker", "Light", "Aqua", "Amethyst", "Rose" },
     Fax = require(script.Fax),
@@ -5833,7 +5875,7 @@ return {
 }
 
 end
-loaders[nodes[41]] = function(script, require)
+loaders[nodes[42]] = function(script, require)
 return {
 	Name = "Amethyst",
 	Accent = Color3.fromRGB(97, 62, 167),
@@ -5883,7 +5925,7 @@ return {
 }
 
 end
-loaders[nodes[42]] = function(script, require)
+loaders[nodes[43]] = function(script, require)
 return {
 	Name = "Aqua",
 	Accent = Color3.fromRGB(60, 165, 165),
@@ -5933,7 +5975,7 @@ return {
 }
 
 end
-loaders[nodes[43]] = function(script, require)
+loaders[nodes[44]] = function(script, require)
 return {
 	Name = "Dark",
 	Accent = Color3.fromRGB(96, 205, 255),
@@ -5983,7 +6025,7 @@ return {
 }
 
 end
-loaders[nodes[44]] = function(script, require)
+loaders[nodes[45]] = function(script, require)
 return {
 	Name = "Darker",
 	Accent = Color3.fromRGB(72, 138, 182),
@@ -6016,7 +6058,7 @@ return {
 }
 
 end
-loaders[nodes[45]] = function(script, require)
+loaders[nodes[46]] = function(script, require)
 return {
     Name = "Fax",
     Accent = Color3.fromRGB(155, 112, 224),
@@ -6060,7 +6102,7 @@ return {
 }
 
 end
-loaders[nodes[46]] = function(script, require)
+loaders[nodes[47]] = function(script, require)
 return {
 	Name = "Light",
 	Accent = Color3.fromRGB(0, 103, 192),
@@ -6110,7 +6152,7 @@ return {
 }
 
 end
-loaders[nodes[47]] = function(script, require)
+loaders[nodes[48]] = function(script, require)
 return {
 	Name = "Rose",
 	Accent = Color3.fromRGB(180, 55, 90),
