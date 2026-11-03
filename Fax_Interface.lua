@@ -1130,6 +1130,13 @@ return function(Title, Desc, Parent, Hover)
 		Element.DescLabel.Text = Set
 	end
 
+    function Element:SetEmbedded()
+        Hover = false
+        Creator.OverrideTag(self.Frame, { BackgroundColor3 = "Element" })
+        self.Frame.BackgroundTransparency = 1
+        self.Border.Enabled = false
+    end
+
 	function Element:Destroy()
 		Element.Frame:Destroy()
 	end
@@ -1148,15 +1155,19 @@ return function(Title, Desc, Parent, Hover)
 		)
 
 		Creator.AddSignal(Element.Frame.MouseEnter, function()
+            if not Hover then return end
 			SetTransparency(Creator.GetThemeProperty("ElementTransparency") - Creator.GetThemeProperty("HoverChange"))
 		end)
 		Creator.AddSignal(Element.Frame.MouseLeave, function()
+            if not Hover then return end
 			SetTransparency(Creator.GetThemeProperty("ElementTransparency"))
 		end)
 		Creator.AddSignal(Element.Frame.MouseButton1Down, function()
+            if not Hover then return end
 			SetTransparency(Creator.GetThemeProperty("ElementTransparency") + Creator.GetThemeProperty("HoverChange"))
 		end)
 		Creator.AddSignal(Element.Frame.MouseButton1Up, function()
+            if not Hover then return end
 			SetTransparency(Creator.GetThemeProperty("ElementTransparency") - Creator.GetThemeProperty("HoverChange"))
 		end)
 	end
@@ -4187,6 +4198,11 @@ function Element:New(Idx, Config)
 	local Dragging = false
 
 	local SliderFrame = require(Components.Element)(Config.Title, Config.Description, self.Container, false)
+    if Config.Embedded then
+        SliderFrame:SetEmbedded()
+        SliderFrame.TitleLabel.TextSize = 14
+        Creator.OverrideTag(SliderFrame.TitleLabel, { TextColor3 = "SubText" })
+    end
 	SliderFrame.DescLabel.Size = UDim2.new(1, -170, 0, 14)
 
 	Slider.SetTitle = SliderFrame.SetTitle
@@ -4263,7 +4279,28 @@ function Element:New(Idx, Config)
 		SliderRail,
 	})
 
-	SliderFrame:StackControl(SliderInner)
+    if Config.Embedded then
+        SliderFrame.LabelHolder.Size = UDim2.new(1, -24, 0, 0)
+        SliderFrame.LabelHolder.Position = UDim2.fromOffset(12, 0)
+        SliderFrame.LabelHolder.UIPadding.PaddingTop = UDim.new(0, 0)
+        SliderFrame.LabelHolder.UIPadding.PaddingBottom = UDim.new(0, 30)
+        SliderFrame.TitleLabel.Size = UDim2.new(1, -64, 0, 24)
+        SliderInner:FindFirstChildOfClass("UISizeConstraint").MaxSize = Vector2.new(math.huge, math.huge)
+        SliderInner.Size = UDim2.new(1, -24, 0, 4)
+        SliderInner.AnchorPoint = Vector2.new(0, 0)
+        SliderInner.Position = UDim2.new(0, 12, 1, -22)
+        SliderDisplay.Parent = SliderFrame.Frame
+        SliderDisplay.Size = UDim2.fromOffset(60, 24)
+        SliderDisplay.Position = UDim2.new(1, -12, 0, 0)
+        SliderDisplay.AnchorPoint = Vector2.new(1, 0)
+        SliderDisplay.TextSize = 14
+    else
+        SliderFrame:StackControl(SliderInner)
+    end
+    function Slider:SetVisible(Visible)
+        SliderFrame.Frame.Visible = Visible
+        if not Visible then Dragging = false end
+    end
 	Creator.AddSignal(SliderDot.InputBegan, function(Input)
 		if
 			Input.UserInputType == Enum.UserInputType.MouseButton1
@@ -4354,6 +4391,39 @@ function Element:New(Idx, Config)
 	Toggle.SetTitle = ToggleFrame.SetTitle
 	Toggle.SetDesc = ToggleFrame.SetDesc
 
+    -- Optional subordinate slider shares this toggle's card.
+    function Toggle:AddSlider(SliderIdx, SliderConfig)
+        if self.Slider then self.Slider:Destroy() end
+        if not self.SliderContainer then
+            self.SliderContainer = New("Frame", {
+                Size = UDim2.new(1, 0, 0, 0),
+                AutomaticSize = Enum.AutomaticSize.Y,
+                LayoutOrder = ToggleFrame.Frame.LayoutOrder,
+                Parent = ToggleFrame.Frame.Parent,
+                ThemeTag = {
+                    BackgroundColor3 = "Element",
+                    BackgroundTransparency = "ElementTransparency",
+                },
+            }, {
+                New("UICorner", { CornerRadius = UDim.new(0, 4) }),
+                New("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder }),
+            })
+            ToggleFrame:SetEmbedded()
+            ToggleFrame.Frame.LayoutOrder = 0
+            ToggleFrame.Frame.Parent = self.SliderContainer
+            ToggleFrame.Border.Parent = self.SliderContainer
+            ToggleFrame.Border.Enabled = true
+        end
+        local ConfigCopy = table.clone(SliderConfig)
+        ConfigCopy.Embedded = true
+        self.Slider = require(Root.Elements.Slider).New({
+            Library = Library,
+            Container = self.SliderContainer,
+        }, SliderIdx, ConfigCopy)
+        self.Slider:SetVisible(self.Value)
+        return self.Slider
+    end
+
     -- Place keybind and notification controls beside the toggle switch.
     function Toggle:AddKeybind(KeybindIdx, KeybindConfig)
         if self.Keybind then self.Keybind:Destroy() end
@@ -4414,6 +4484,7 @@ function Element:New(Idx, Config)
 		Value = not not Value
         local PreviousValue = Toggle.Value
 		Toggle.Value = Value
+        if Toggle.Slider then Toggle.Slider:SetVisible(Value) end
 
 		Creator.OverrideTag(ToggleBorder, { Color = Toggle.Value and "Accent" or "ToggleSlider" })
 		Creator.OverrideTag(ToggleCircle, { ImageColor3 = Toggle.Value and "ToggleToggled" or "ToggleSlider" })
@@ -4442,9 +4513,11 @@ function Element:New(Idx, Config)
 	end
 
 	function Toggle:Destroy()
+        if self.Slider then self.Slider:Destroy() end
 		if self.Colorpicker then self.Colorpicker:Destroy() end
 		if self.Keybind then self.Keybind:Destroy() end
 		ToggleFrame:Destroy()
+        if self.SliderContainer then self.SliderContainer:Destroy() end
 		Library.Options[Idx] = nil
 	end
 
