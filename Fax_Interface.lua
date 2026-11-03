@@ -376,7 +376,7 @@ function Library:CreateWindow(Config)
 		Library:ToggleTransparency(false)
 	end
 
-    if Config.FreeMouse then require(Root.MouseController)(Library, Window, Config.HideMouseWhenHidden) end
+    if Config.FreeMouse then require(Root.MouseController)(Library, Window, Config.HideMouseWhenHidden, Config.IgnoreMouseTeams) end
 	return Window
 end
 
@@ -5290,10 +5290,14 @@ return {
 end
 loaders[nodes[30]] = function(script, require)
 -- Preserve the game's camera; release only the pointer while the desktop menu is visible.
-return function(Library, Window, HideWhenHidden)
+return function(Library, Window, HideWhenHidden, IgnoreTeams)
     local Input = game:GetService("UserInputService")
     local Run = game:GetService("RunService")
-    local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
+    local Player = game:GetService("Players").LocalPlayer
+    local Mouse = Player:GetMouse()
+    local function Ignored()
+        return IgnoreTeams and Player.Team and IgnoreTeams[Player.Team.Name] == true
+    end
     local Environment = getgenv and getgenv() or _G
     local Name = "Fax_MenuMouse"
     if Environment[Name] then Environment[Name]() end
@@ -5319,7 +5323,7 @@ return function(Library, Window, HideWhenHidden)
     end
     local function Update()
         if not Previous then return end
-        if Destroyed or Library.Unloaded or not Focused or not Window.Root.Visible or not Library.GUI.Enabled then
+        if Ignored() or Destroyed or Library.Unloaded or not Focused or not Window.Root.Visible or not Library.GUI.Enabled then
             Restore()
             return
         end
@@ -5331,13 +5335,17 @@ return function(Library, Window, HideWhenHidden)
         Mouse.Icon = ""
     end
     local function Sync()
+        if Ignored() then
+            Restore()
+            return
+        end
         if Destroyed or Library.Unloaded or not Focused or not Window.Root.Visible or not Library.GUI.Enabled then
             Restore()
             if HideWhenHidden and not Destroyed and not Library.Unloaded and Focused
                 and (not Window.Root.Visible or not Library.GUI.Enabled) then
                 HiddenVisible = Input.MouseIconEnabled
                 local function HideCursor()
-                    if not Destroyed and not Library.Unloaded and Focused
+                    if not Ignored() and not Destroyed and not Library.Unloaded and Focused
                         and (not Window.Root.Visible or not Library.GUI.Enabled) then
                         Input.MouseIconEnabled = false
                     end
@@ -5369,6 +5377,7 @@ return function(Library, Window, HideWhenHidden)
         Environment[Name] = nil
     end
     Environment[Name] = Cleanup
+    if IgnoreTeams then Connect(Player:GetPropertyChangedSignal("Team"), Sync) end
     Connect(Window.Root:GetPropertyChangedSignal("Visible"), Sync)
     Connect(Library.GUI:GetPropertyChangedSignal("Enabled"), Sync)
     Connect(Library.GUI.Destroying, Cleanup)
