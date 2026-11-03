@@ -376,7 +376,7 @@ function Library:CreateWindow(Config)
 		Library:ToggleTransparency(false)
 	end
 
-    if Config.FreeMouse then require(Root.MouseController)(Library, Window) end
+    if Config.FreeMouse then require(Root.MouseController)(Library, Window, Config.HideMouseWhenHidden) end
 	return Window
 end
 
@@ -5290,7 +5290,7 @@ return {
 end
 loaders[nodes[30]] = function(script, require)
 -- Preserve the game's camera; release only the pointer while the desktop menu is visible.
-return function(Library, Window)
+return function(Library, Window, HideWhenHidden)
     local Input = game:GetService("UserInputService")
     local Run = game:GetService("RunService")
     local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
@@ -5300,10 +5300,16 @@ return function(Library, Window)
     if Library.Device ~= "Computer" then return end
 
     local Previous, Focused, Destroyed = nil, true, false
+    local HiddenVisible = nil
     local Connections = {}
     local function Restore()
         Run:UnbindFromRenderStep(Name .. "_Before")
         Run:UnbindFromRenderStep(Name)
+        Run:UnbindFromRenderStep(Name .. "_Hidden")
+        if HiddenVisible ~= nil then
+            Input.MouseIconEnabled = HiddenVisible
+            HiddenVisible = nil
+        end
         if not Previous then return end
         Input.MouseBehavior = Previous.Behavior
         Input.MouseIconEnabled = Previous.Visible
@@ -5313,6 +5319,10 @@ return function(Library, Window)
     end
     local function Update()
         if not Previous then return end
+        if Destroyed or Library.Unloaded or not Focused or not Window.Root.Visible or not Library.GUI.Enabled then
+            Restore()
+            return
+        end
         local Rotating = Focused and not Input:GetFocusedTextBox()
             and Input:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
         Input.MouseDeltaSensitivity = Rotating and Previous.Sensitivity or 0
@@ -5323,8 +5333,21 @@ return function(Library, Window)
     local function Sync()
         if Destroyed or Library.Unloaded or not Focused or not Window.Root.Visible or not Library.GUI.Enabled then
             Restore()
+            if HideWhenHidden and not Destroyed and not Library.Unloaded and Focused
+                and (not Window.Root.Visible or not Library.GUI.Enabled) then
+                HiddenVisible = Input.MouseIconEnabled
+                local function HideCursor()
+                    if not Destroyed and not Library.Unloaded and Focused
+                        and (not Window.Root.Visible or not Library.GUI.Enabled) then
+                        Input.MouseIconEnabled = false
+                    end
+                end
+                HideCursor()
+                Run:BindToRenderStep(Name .. "_Hidden", Enum.RenderPriority.Last.Value + 1, HideCursor)
+            end
             return
         end
+        if HiddenVisible ~= nil then Restore() end
         if not Previous then
             Previous = {
                 Behavior = Input.MouseBehavior, Visible = Input.MouseIconEnabled,
